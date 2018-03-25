@@ -1,0 +1,58 @@
+[
+{
+  "model": "authenticationjwt.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$o5WY2D3iX9VC$rKBbWhlCXAIKHBUma4+NgaBlrLjmH8GtlorH0/1fRe4=",
+    "last_login": null,
+    "username": "usertest",
+    "email": "user@test.com",
+    "is_active": true,
+    "is_staff": false,
+    "created_at": "2018-03-04T17:34:58.436Z",
+    "updated_at": "2018-03-04T17:34:58.436Z"
+  }
+},
+{
+  "model": "authenticationjwt.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$sf3fOTjuaxtd$+hquyqaBQDgBYFMqBExQ90fytdImylBKvnq7LisW7l8=",
+    "last_login": null,
+    "username": "usertest2",
+    "email": "user2@test.com",
+    "is_active": true,
+    "is_staff": false,
+    "created_at": "2018-03-04T17:41:42.296Z",
+    "updated_at": "2018-03-04T17:41:42.296Z"
+  }
+},
+{
+  "model": "authenticationjwt.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$LM2lfhBtftms$j7sryKDjtFXzrsuxxIGCbF7qj9vPUYHk5he/kRXwOYI=",
+    "last_login": null,
+    "username": "testuser3",
+    "email": "testuser3@liveswot.com",
+    "is_active": true,
+    "is_staff": false,
+    "created_at": "2018-03-04T18:13:34.973Z",
+    "updated_at": "2018-03-04T18:13:34.973Z"
+  }
+},
+{
+  "model": "authenticationjwt.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$36000$FQ4ECzUoiA0O$kHquNSsrqgn7XHoarUq2iqSWCmrjbZuhgnj3YRNUoSM=",
+    "last_login": null,
+    "username": "imran.ariffin",
+    "email": "imran.ariffin@liveswot.com",
+    "is_active": true,
+    "is_staff": false,
+    "created_at": "2018-03-04T19:24:26.479Z",
+    "updated_at": "2018-03-04T19:24:26.479Z"
+  }
+}
+]
