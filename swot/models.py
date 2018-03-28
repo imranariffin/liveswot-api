@@ -1,7 +1,7 @@
 from django.db import models
 
-class SwotItem(models.Model):
 
+class SwotItem(models.Model):
     CARD_TYPES = (
         ('strength', 'Strength'), ('weakness', 'Weakness'),
         ('opportunity', 'Opportunity'), ('threat', 'Threat'))
@@ -13,8 +13,8 @@ class SwotItem(models.Model):
     class Meta:
         ordering = ('created',)
 
-class Vote(models.Model):
 
+class Vote(models.Model):
     VOTE_TYPES = (('up', 'UP'), ('down', 'DOWN'))
 
     created = models.DateTimeField(auto_now_add=True)

@@ -6,21 +6,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    dependencies = [
+        ('swot', '0001_initial'),
+    ]
 
-  dependencies = [
-    ('swot', '0001_initial'),
-  ]
-
-  operations = [
-    migrations.AddField(
-      model_name='swotitem',
-      name='vote',
-      field=models.PositiveIntegerField(default=0),
-      preserve_default=False,
-    ),
-    migrations.AddField(
-      model_name='swotitem',
-      name='voted',
-      field=models.BooleanField(default=False),
-    ),
-  ]
+    operations = [
+        migrations.AddField(
+            model_name='swotitem',
+            name='vote',
+            field=models.PositiveIntegerField(default=0),
+            preserve_default=False,
+        ),
+        migrations.AddField(
+            model_name='swotitem',
+            name='voted',
+            field=models.BooleanField(default=False),
+        ),
+    ]

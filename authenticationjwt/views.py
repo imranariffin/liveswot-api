@@ -3,8 +3,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import RegistrationSerializer, LoginSerializer
 from .renderers import UserJSONRenderer
+from .serializers import RegistrationSerializer, LoginSerializer
+
 
 class RegistrationAPIView(APIView):
     permission_classes = (AllowAny,)
@@ -19,6 +20,7 @@ class RegistrationAPIView(APIView):
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class LoginAPIView(APIView):
     permission_classes = (AllowAny,)

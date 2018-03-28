@@ -6,18 +6,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    dependencies = [
+        ('swot', '0002_auto_20170821_2153'),
+    ]
 
-  dependencies = [
-    ('swot', '0002_auto_20170821_2153'),
-  ]
-
-  operations = [
-    migrations.RemoveField(
-      model_name='swotitem',
-      name='vote',
-    ),
-    migrations.RemoveField(
-      model_name='swotitem',
-      name='voted',
-    ),
-  ]
+    operations = [
+        migrations.RemoveField(
+            model_name='swotitem',
+            name='vote',
+        ),
+        migrations.RemoveField(
+            model_name='swotitem',
+            name='voted',
+        ),
+    ]

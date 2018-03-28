@@ -1,17 +1,17 @@
-from django.urls import reverse
-from django.test import Client, TestCase
-from rest_framework import status
-from django.conf import settings
-import jwt
 import json
-from django.contrib.auth.hashers import make_password
 
-from .views import LoginAPIView
+import jwt
+from django.conf import settings
+from django.test import Client, TestCase
+from django.urls import reverse
+from rest_framework import status
 
 client = Client()
 
+
 class LoginAPIViewTestCase(TestCase):
     fixtures = ['users.json']
+
     def test_login_wrong_password_should_return_400(self):
         response = client.post(
             reverse('authenticationjwt:login'),
@@ -53,7 +53,7 @@ class LoginAPIViewTestCase(TestCase):
             reverse('authenticationjwt:login'),
             content_type="application/json",
             data=json.dumps({
-                'user' : {
+                'user': {
                     'email': 'non.existing@liveswot.com',
                     'password': 'dontcare',
                 },
@@ -70,7 +70,7 @@ class LoginAPIViewTestCase(TestCase):
             reverse('authenticationjwt:login'),
             content_type="application/json",
             data=json.dumps({
-                'user' : {
+                'user': {
                     'email': 'non.existing@liveswot.com',
                     'password': 'dontcare',
                 },
