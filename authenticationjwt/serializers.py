@@ -1,16 +1,18 @@
-from rest_framework import serializers
-from django.contrib.auth import authenticate
 import re
+
+from django.contrib.auth import authenticate
+from rest_framework import serializers
 
 from .models import User
 
-email_validation = { 'max_length': 255 }
+email_validation = {'max_length': 255}
 password_validation = {
     'max_length': 128,
     'min_length': 8,
     'write_only': True,
 }
-token_validation = { 'max_length': 255, 'read_only': True }
+token_validation = {'max_length': 255, 'read_only': True}
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     email = serializers.CharField(**email_validation)
@@ -34,6 +36,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255, read_only=True)

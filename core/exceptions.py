@@ -1,5 +1,6 @@
 from rest_framework.views import exception_handler
 
+
 def core_exception_handler(exc, context):
     response = exception_handler(exc, context)
     handlers = {
@@ -12,6 +13,7 @@ def core_exception_handler(exc, context):
         return handlers[exception_class](exc, context, response)
 
     return response
+
 
 def _handle_generic_error(exc, context, response):
     response.data = {

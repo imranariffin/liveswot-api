@@ -6,14 +6,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
+    dependencies = [
+        ('swot', '0005_auto_20180226_0255'),
+    ]
 
-  dependencies = [
-    ('swot', '0005_auto_20180226_0255'),
-  ]
-
-  operations = [
-    migrations.RenameModel(
-      old_name='Item',
-      new_name='SwotItem',
-    ),
-  ]
+    operations = [
+        migrations.RenameModel(
+            old_name='Item',
+            new_name='SwotItem',
+        ),
+    ]

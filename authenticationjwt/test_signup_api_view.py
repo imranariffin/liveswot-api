@@ -1,11 +1,13 @@
+import json
+
+import jwt
+from django.conf import settings
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
-from django.conf import settings
-import json
-import jwt
 
 client = Client()
+
 
 class SignUpAPIViewStatusCodeTestCase(TestCase):
     fixtures = ['users.json']
@@ -98,6 +100,7 @@ class SignUpAPIViewStatusCodeTestCase(TestCase):
                 }}))
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
 
 class SignUpAPIViewStatusCodeTestCase(TestCase):
     fixtures = ['users.json']

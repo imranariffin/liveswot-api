@@ -6,23 +6,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
+    initial = True
 
-  initial = True
+    dependencies = [
+    ]
 
-  dependencies = [
-  ]
-
-  operations = [
-    migrations.CreateModel(
-      name='SwotItem',
-      fields=[
-        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        ('created', models.DateTimeField(auto_now_add=True)),
-        ('boardtype', models.CharField(choices=[(b'strength', b'Strength'), (b'weakness', b'Weakness'), (b'opportunity', b'Opportunity'), (b'threat', b'Threat')], max_length=11)),
-        ('text', models.TextField()),
-      ],
-      options={
-        'ordering': ('created',),
-      },
-    ),
-  ]
+    operations = [
+        migrations.CreateModel(
+            name='SwotItem',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('boardtype', models.CharField(
+                    choices=[(b'strength', b'Strength'), (b'weakness', b'Weakness'), (b'opportunity', b'Opportunity'),
+                             (b'threat', b'Threat')], max_length=11)),
+                ('text', models.TextField()),
+            ],
+            options={
+                'ordering': ('created',),
+            },
+        ),
+    ]
