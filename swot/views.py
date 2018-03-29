@@ -1,29 +1,59 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
-from rest_framework import mixins, generics
+from django.http.response import HttpResponse
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework import mixins, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.http.response import JsonResponse
+from django.core import serializers
+import json
 
 from swot.models import SwotItem, Vote
 from swot.serializers import SwotItemSerializer, VoteSerializer
 
 
-class SwotItemList(mixins.ListModelMixin,
-                   mixins.CreateModelMixin,
-                   generics.GenericAPIView):
-    """
-    Request types: GET, POST
-    List all items, or create a new item.
-    """
-    queryset = SwotItem.objects.all()
-    serializer_class = SwotItemSerializer
-    permission_classes = (IsAuthenticated,)
+# class SwotItemList(mixins.ListModelMixin,
+#                    mixins.CreateModelMixin,
+#                    generics.GenericAPIView):
+#     """
+#     Request types: GET, POST
+#     List all items, or create a new item.
+#     """
+#     queryset = SwotItem.objects.all()
+#     serializer_class = SwotItemSerializer
+#     permission_classes = (IsAuthenticated,)
+#
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+@api_view(http_method_names=['GET', 'POST'])
+@authentication_classes((IsAuthenticated,))
+def swot_list(request):
+    if request.method == 'GET':
+        swots = SwotItem.objects.all()
+        serialized = [SwotItemSerializer(swot).data for swot in swots]
+        return Response({'data': serialized})
+    else:
+        data = json.loads(request.body)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+        errors = []
+        if 'cardType' not in data:
+            errors.append({'cardType': 'required'})
+        if 'text' not in data:
+            errors.append({'text': 'required'})
+        if errors:
+            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        card_type = data['cardType']
+        text = data['text']
+        swot = SwotItem.objects.create(cardType=card_type, text=text)
+        serialized = SwotItemSerializer(swot).data
+
+        return Response({'data': serialized})
 
 
 class SwotItemDetail(mixins.RetrieveModelMixin,

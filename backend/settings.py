@@ -37,28 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
-    'rest_framework',
-
     'swot.apps.SwotConfig',
+    'rest_framework',
     'authenticationjwt.apps.AuthenticationjwtConfig',
 ]
 
 SITE_ID = 1
-
-REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    # 	'rest_framework.permissions.IsAuthenticated',
-    # ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'authenticationjwt.backends.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ],
-    'EXCEPTION_HANDLER': 'core.exceptions.core_exception_handler',
-    'NON_FIELD_ERRORS_KEY': 'error',
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-}
 
 CORS_ORIGIN_WHITELIST = (
     # 'hostname.example.com',
@@ -74,6 +58,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'authenticationjwt.middlewares.jwt_middleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
