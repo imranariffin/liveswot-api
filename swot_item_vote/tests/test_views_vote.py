@@ -9,14 +9,16 @@ client = APIClient()
 
 
 class SimpleVoteTestCase(TestCase):
-    fixtures = ['items.json', 'users.json', ]
+    fixtures = ['swotItems.json', 'users.json', ]
 
     def setUp(self):
         self.vote_up = {'voteType': 'up', }
 
-        auth_data = {'user':
-                         {'email': 'imran.ariffin@liveswot.com', 'password': 'katakunci'}
-                     }
+        auth_data = {
+            'user': {
+                'email': 'imran.ariffin@liveswot.com', 'password': 'katakunci'
+            }
+        }
         gettoken_response = client.post(
             reverse('authenticationjwt:login'),
             content_type="application/json",
@@ -78,7 +80,7 @@ class SimpleVoteTestCase(TestCase):
 
 
 class MultipleVotesTestCase(TestCase):
-    fixtures = ['items.json', 'users.json', ]
+    fixtures = ['swotItems.json', 'users.json', ]
 
     def setUp(self):
         self.vote_up = {'voteType': 'up', }

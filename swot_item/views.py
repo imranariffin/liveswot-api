@@ -6,8 +6,8 @@ from rest_framework.serializers import ValidationError
 
 import json
 
-from swot.models import SwotItem
-from swot.serializers import SwotItemSerializer
+from swot_item.models import SwotItem
+from swot_item.serializers import SwotItemSerializer
 
 
 @api_view(http_method_names=['GET', 'POST'])

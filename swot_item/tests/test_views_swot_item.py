@@ -5,14 +5,14 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from swot.models import SwotItem
-from swot.serializers import SwotItemSerializer
+from swot_item.models import SwotItem
+from swot_item.serializers import SwotItemSerializer
 
 client = APIClient()
 
 
 class SimpleItemTestCase(TestCase):
-    fixtures = ['items.json']
+    fixtures = ['swotItems.json']
 
     def setUp(self):
         self.valid_strength = {
@@ -93,7 +93,7 @@ class SimpleItemTestCase(TestCase):
 
 
 class ItemDeletionTestCase(TestCase):
-    fixtures = ['items.json']
+    fixtures = ['swotItems.json']
 
     def setUp(self):
         self.vote_up = {

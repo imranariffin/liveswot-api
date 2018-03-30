@@ -7,7 +7,7 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('swot', '0002_auto_20170821_2153'),
+        ('swot_item', '0002_auto_20170821_2153'),
     ]
 
     operations = [

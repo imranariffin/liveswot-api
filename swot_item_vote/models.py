@@ -1,6 +1,6 @@
 from django.db import models
 
-from swot.models import SwotItem
+from swot_item.models import SwotItem
 
 
 class Vote(models.Model):
