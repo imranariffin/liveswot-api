@@ -1,34 +1,17 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseNotFound, HttpResponseBadRequest
-from django.http.response import HttpResponse
+
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework import mixins, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.http.response import JsonResponse
-from django.core import serializers
+from rest_framework.serializers import ValidationError
+
 import json
 
 from swot.models import SwotItem, Vote
 from swot.serializers import SwotItemSerializer, VoteSerializer
 
-
-# class SwotItemList(mixins.ListModelMixin,
-#                    mixins.CreateModelMixin,
-#                    generics.GenericAPIView):
-#     """
-#     Request types: GET, POST
-#     List all items, or create a new item.
-#     """
-#     queryset = SwotItem.objects.all()
-#     serializer_class = SwotItemSerializer
-#     permission_classes = (IsAuthenticated,)
-#
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
-#
-#     def post(self, request, *args, **kwargs):
-#         return self.create(request, *args, **kwargs)
 
 @api_view(http_method_names=['GET', 'POST'])
 @authentication_classes((IsAuthenticated,))
@@ -56,26 +39,33 @@ def swot_list(request):
         return Response({'data': serialized})
 
 
-class SwotItemDetail(mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.DestroyModelMixin,
-                     generics.GenericAPIView):
-    """
-    Request types: GET, PUT, DELETE
-    Retrieve, update or delete an item.
-    """
-    queryset = SwotItem.objects.all()
-    serializer_class = SwotItemSerializer
-    permission_classes = (IsAuthenticated,)
+@api_view(['PUT', 'DELETE'])
+@authentication_classes((IsAuthenticated,))
+def swot_detail(request, pk):
 
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+    if request.method == 'PUT':
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+        data = json.loads(request.body)
 
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
+        try:
+            swot = SwotItem.objects.get(pk=pk)
+        except SwotItem.DoesNotExist as dne:
+            return Response({'errors': [dne.message]}, status=status.HTTP_404_NOT_FOUND)
+
+        if 'text' in data:
+            swot.text = data['text']
+
+        try:
+            swot.save()
+        except ValueError as ve:
+            return Response({'errors': [ve.message]}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            serialized = SwotItemSerializer(swot).data
+        except ValidationError as ve:
+            return Response({'errors': [msg for msg in ve.detail]})
+
+        return Response({'data': serialized}, status=status.HTTP_200_OK)
 
 
 class VoteList(mixins.ListModelMixin,

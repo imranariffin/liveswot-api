@@ -27,7 +27,7 @@ urlpatterns = [
     ),
     url(
         URL_API_SWOT_ITEM_DETAIL,
-        swotviews.SwotItemDetail.as_view(),
+        swotviews.swot_detail,
         name='delete_swot_item',
     ),
     url(

@@ -16,7 +16,6 @@ def _get_user(token):
         raise exceptions.AuthenticationFailed(msg)
 
     try:
-        print payload['id']
         user = User.objects.get(pk=payload['id'])
     except User.DoesNotExist:
         msg = 'No user matching the token provided'
@@ -52,7 +51,6 @@ def jwt_middleware(get_response):
 
         if prefix.lower() != auth_header_prefix:
             msg = 'Authorization prefix does not match'
-            print msg
             raise exceptions.AuthenticationFailed(msg)
 
         return _get_user(token)

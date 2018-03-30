@@ -2,8 +2,10 @@ import re
 
 from django.contrib.auth import authenticate
 from rest_framework import serializers
+from rest_framework import status
 
 from .models import User
+
 
 email_validation = {'max_length': 255}
 password_validation = {
@@ -30,7 +32,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
         emailregex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
         if not re.match(emailregex, email):
-            raise serializers.ValidationError('Email is not valid')
+            raise serializers.ValidationError(
+                detail='Email is not valid',
+                code=status.HTTP_400_BAD_REQUEST)
 
         return data
 
@@ -55,25 +59,26 @@ class LoginSerializer(serializers.ModelSerializer):
 
         if email is None:
             raise serializers.ValidationError(
-                'An email address is required to login'
+                detail='An email address is required to login',
+                code=status.HTTP_400_BAD_REQUEST
             )
 
         if password is None:
             raise serializers.ValidationError(
-                'A password is required to login'
-            )
+                detail='A password is required to login',
+                code=status.HTTP_400_BAD_REQUEST)
 
         user = authenticate(username=email, password=password)
 
         if user is None:
             raise serializers.ValidationError(
-                'There is no such user with the email and password'
-            )
+                detail='There is no such user with the email and password',
+                code=status.HTTP_404_NOT_FOUND)
 
         if not user.is_active:
             raise serializers.ValidationError(
-                'The user is inactive'
-            )
+                detail='The user is inactive',
+                code=status.HTTP_403_FORBIDDEN)
 
         return {
             'email': user.email,
