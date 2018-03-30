@@ -1,16 +1,13 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseNotFound, HttpResponseBadRequest
-
 from rest_framework.decorators import api_view, authentication_classes
-from rest_framework import mixins, generics, status
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 import json
 
-from swot.models import SwotItem, Vote
-from swot.serializers import SwotItemSerializer, VoteSerializer
+from swot.models import SwotItem
+from swot.serializers import SwotItemSerializer
 
 
 @api_view(http_method_names=['GET', 'POST'])
@@ -66,60 +63,3 @@ def swot_detail(request, pk):
             return Response({'errors': [msg for msg in ve.detail]})
 
         return Response({'data': serialized}, status=status.HTTP_200_OK)
-
-
-class VoteList(mixins.ListModelMixin,
-               mixins.CreateModelMixin,
-               generics.GenericAPIView):
-    """
-    Request types: GET, POST
-    List all votes, or create a new vote for a specific item
-    """
-    serializer_class = VoteSerializer
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request, *args, **kwargs):
-        swot_item_id = int(kwargs['pk'])
-        item = SwotItem.objects.filter(id=swot_item_id).first()
-        self.queryset = Vote.objects.filter(item=item)
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        swot_item_id = int(kwargs['pk'])
-        item = SwotItem.objects.filter(id=swot_item_id).first()
-
-        if item is None:
-            return HttpResponseNotFound()
-
-        voteType = request.data['voteType']
-        if voteType is None or (voteType != 'up' and voteType != 'down'):
-            return HttpResponseBadRequest()
-
-        new_vote_type = None
-        try:
-            vote = Vote.objects.get(item_id=swot_item_id)
-            new_vote_type = vote.voteType
-            vote.delete()
-        except ObjectDoesNotExist as e:
-            pass
-
-        last_vote = None
-        vote_count = sum(map(
-            lambda v: 1 if v.voteType == 'up' else -1,
-            Vote.objects.filter(item=item))
-        )
-
-        if new_vote_type == voteType:
-            return Response({
-                'last_vote': last_vote,
-                'vote': vote_count,
-            })
-
-        new_vote = VoteSerializer(
-            Vote.objects.create(item=item, voteType=voteType)
-        ).data
-
-        return Response({
-            'last_vote': new_vote,
-            'vote': vote_count + (1 if new_vote['voteType'] == 'up' else -1),
-        })

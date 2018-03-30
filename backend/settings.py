@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'swot.apps.SwotConfig',
+    'swot_item_vote.apps.SwotItemVoteConfig',
     'rest_framework',
     'authenticationjwt.apps.AuthenticationjwtConfig',
 ]

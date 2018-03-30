@@ -3,6 +3,7 @@ from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from swot import views as swotviews
+from swot_item_vote import views as voteviews
 
 URL_API_AUTH = r'^api/auth/'
 URL_ADMIN = r'^admin/'
@@ -32,7 +33,7 @@ urlpatterns = [
     ),
     url(
         URL_API_SWOT_ITEM_DETAIL_VOTE,
-        swotviews.VoteList.as_view(),
+        voteviews.VoteList.as_view(),
         name='get_post_vote',
     ),
 ]

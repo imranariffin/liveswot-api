@@ -2,7 +2,8 @@ import datetime
 
 from django.test import TestCase
 
-from swot.models import SwotItem, Vote
+from swot.models import SwotItem
+from swot_item_vote.models import Vote
 
 ITEM_1_TEXT = 'Strength item #1'
 
