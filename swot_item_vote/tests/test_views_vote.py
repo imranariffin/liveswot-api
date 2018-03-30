@@ -12,11 +12,17 @@ client = APIClient()
 
 class SimpleVoteTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
+    auth_data = {
+        'user': {
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
 
     def setUp(self):
         self.vote_up = {'voteType': 'up', }
 
-        testutils.setupToken(self, client)
+        testutils.setuptoken(self, self.auth_data, client)
 
     def test_vote_non_existing_item_should_repond_404(self):
         response = client.post(
@@ -69,12 +75,18 @@ class SimpleVoteTestCase(TestCase):
 
 class MultipleVotesTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
+    auth_data = {
+        'user': {
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
 
     def setUp(self):
         self.vote_up = {'voteType': 'up', }
         self.vote_down = {'voteType': 'down', }
 
-        testutils.setupToken(self, client)
+        testutils.setuptoken(self, self.auth_data, client)
 
     def test_vote_up_twice_should_neutralize(self):
         item_id = 1

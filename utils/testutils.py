@@ -3,13 +3,8 @@ import json
 from django.urls import reverse
 
 
-def setupToken(self, client):
+def setuptoken(self, auth_data, client):
 
-    auth_data = {
-        'user': {
-            'email': 'imran.ariffin@liveswot.com', 'password': 'katakunci'
-        }
-    }
     gettoken_response = client.post(
         reverse('authenticationjwt:login'),
         content_type="application/json",

@@ -5,9 +5,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from swot_item.models import SwotItem
-from swot_item.serializers import SwotItemSerializer
-
 from utils import testutils
 
 client = APIClient()
@@ -15,30 +12,35 @@ client = APIClient()
 
 class SimpleItemTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
+    auth_data = {
+        'user': {
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+    valid_strength = {
+        'cardType': 'strength',
+        'text': 'Strength item #1',
+    }
+    valid_strength2 = {
+        'cardType': 'strength',
+        'text': 'Strength item #2',
+    }
+    valid_weakness = {
+        'cardType': 'weakness',
+        'text': 'Weakness item #1',
+    }
+    invalid_item_wrong_cardtype = {
+        'cardType': 'something',
+        'text': 'Invalid item #1',
+    }
+    invalid_item2_empty_text = {
+        'cardType': 'strength',
+        'text': '',
+    }
 
     def setUp(self):
-        self.valid_strength = {
-            'cardType': 'strength',
-            'text': 'Strength item #1',
-        }
-        self.valid_strength2 = {
-            'cardType': 'strength',
-            'text': 'Strength item #2',
-        }
-        self.valid_weakness = {
-            'cardType': 'weakness',
-            'text': 'Weakness item #1',
-        }
-        self.invalid_item_wrong_cardtype = {
-            'cardType': 'something',
-            'text': 'Invalid item #1',
-        }
-        self.invalid_item2_empty_text = {
-            'cardType': 'strength',
-            'text': '',
-        }
-
-        testutils.setupToken(self, client)
+        testutils.setuptoken(self, self.auth_data, client)
 
     def test_get_all_items(self):
         response = client.get(reverse('get_post_delete_swot_item'), kwargs={})
@@ -81,15 +83,20 @@ class SimpleItemTestCase(TestCase):
 
 class ItemDeletionTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
+    auth_data = {
+        'user': {
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+    vote_up = {
+        'swot_item_id': 1,
+        'voteType': 'up',
+    }
 
     def setUp(self):
 
-        testutils.setupToken(self, client)
-
-        self.vote_up = {
-            'swot_item_id': 1,
-            'voteType': 'up',
-        }
+        testutils.setuptoken(self, self.auth_data, client)
         client.post(
             reverse('get_post_vote', args=[1]),
             data=json.dumps(self.vote_up),
