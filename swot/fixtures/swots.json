@@ -1,0 +1,32 @@
+[
+  {
+    "model": "swot.Swot",
+    "pk": 1,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "iPhone 200",
+      "description": "The phone with biggest fanboy army",
+      "owner": 5
+    }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 2,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "Samsung S100",
+      "description": "The coolest phone ever",
+      "owner": 5
+    }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 3,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "Moto 3",
+      "description": "Cheap phone for smart people",
+      "owner": 5
+    }
+  }
+]

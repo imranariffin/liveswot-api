@@ -7,18 +7,19 @@ from rest_framework.serializers import ValidationError
 import json
 
 from swot_item.models import SwotItem
-from swot_item.serializers import SwotItemSerializer
+from swot_item.serializers import SwotItemSerializer, serialize_request
 
 
 @api_view(http_method_names=['GET', 'POST'])
 @authentication_classes((IsAuthenticated,))
+@serialize_request
 def swot_list(request):
     if request.method == 'GET':
         swots = SwotItem.objects.all()
         serialized = [SwotItemSerializer(swot).data for swot in swots]
         return Response({'data': serialized})
     else:
-        data = json.loads(request.body)
+        data = request.body
 
         errors = []
         if 'cardType' not in data:
@@ -30,10 +31,11 @@ def swot_list(request):
 
         card_type = data['cardType']
         text = data['text']
-        swot = SwotItem.objects.create(cardType=card_type, text=text)
-        serialized = SwotItemSerializer(swot).data
 
-        return Response({'data': serialized})
+        swot_item = SwotItem.objects.create(cardType=card_type, text=text, )
+        serialized = SwotItemSerializer(swot_item).data
+
+        return Response({'data': serialized}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['PUT', 'DELETE'])

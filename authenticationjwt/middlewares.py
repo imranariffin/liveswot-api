@@ -43,7 +43,6 @@ def jwt_middleware(get_response):
 
         if not auth_header or len(auth_header) != 2:
             msg = 'Authorization token malformed'
-            print msg
             raise exceptions.AuthenticationFailed(msg)
 
         prefix = auth_header[0].decode('utf-8')

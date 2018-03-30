@@ -8,4 +8,9 @@ class Vote(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     voteType = models.CharField(choices=VOTE_TYPES, max_length=4)
-    item = models.ForeignKey(SwotItem, on_delete=models.CASCADE)
+    item = models.ForeignKey(SwotItem,
+                             on_delete=models.SET_NULL,
+                             blank=True,
+                             null=True,
+                             related_name='+',
+                             related_query_name='+')

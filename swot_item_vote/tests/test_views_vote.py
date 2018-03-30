@@ -5,30 +5,18 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from utils import testutils
+
 client = APIClient()
 
 
 class SimpleVoteTestCase(TestCase):
-    fixtures = ['swotItems.json', 'users.json', ]
+    fixtures = ['users.json', 'swots.json', 'swotItems.json']
 
     def setUp(self):
         self.vote_up = {'voteType': 'up', }
 
-        auth_data = {
-            'user': {
-                'email': 'imran.ariffin@liveswot.com', 'password': 'katakunci'
-            }
-        }
-        gettoken_response = client.post(
-            reverse('authenticationjwt:login'),
-            content_type="application/json",
-            data=json.dumps(auth_data))
-
-        client.credentials(
-            HTTP_AUTHORIZATION='Bearer ' + gettoken_response.data['token']
-        )
-
-        self.token = gettoken_response.data['token']
+        testutils.setupToken(self, client)
 
     def test_vote_non_existing_item_should_repond_404(self):
         response = client.post(
@@ -80,28 +68,13 @@ class SimpleVoteTestCase(TestCase):
 
 
 class MultipleVotesTestCase(TestCase):
-    fixtures = ['swotItems.json', 'users.json', ]
+    fixtures = ['users.json', 'swots.json', 'swotItems.json']
 
     def setUp(self):
         self.vote_up = {'voteType': 'up', }
         self.vote_down = {'voteType': 'down', }
 
-        auth_data = {
-            'user': {
-                'email': 'imran.ariffin@liveswot.com', 'password': 'katakunci'
-            }
-        }
-
-        gettoken_response = client.post(
-            reverse('authenticationjwt:login'),
-            content_type="application/json",
-            data=json.dumps(auth_data))
-
-        client.credentials(
-            HTTP_AUTHORIZATION='Bearer ' + gettoken_response.data['token']
-        )
-
-        self.token = gettoken_response.data['token']
+        testutils.setupToken(self, client)
 
     def test_vote_up_twice_should_neutralize(self):
         item_id = 1

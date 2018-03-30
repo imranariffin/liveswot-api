@@ -4,5 +4,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class SwotItemConfig(AppConfig):
-    name = 'swot_item'
+class SwotConfig(AppConfig):
+    name = 'swot'
