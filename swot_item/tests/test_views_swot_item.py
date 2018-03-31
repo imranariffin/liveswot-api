@@ -98,7 +98,7 @@ class ItemDeletionTestCase(TestCase):
 
         testutils.setuptoken(self, self.auth_data, client)
         client.post(
-            reverse('get_post_vote', args=[1]),
+            reverse('swot_item_vote:get_post', args=[1]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
@@ -107,7 +107,7 @@ class ItemDeletionTestCase(TestCase):
         self.assertEqual(
             1,
             len(client.get(
-                reverse('get_post_vote', args=[1]),
+                reverse('swot_item_vote:get_post', args=[1]),
                 content_type='application/json'
             ).json())
         )
@@ -128,7 +128,7 @@ class ItemDeletionTestCase(TestCase):
         self.assertEqual(
             1,
             len(client.get(
-                reverse('get_post_vote', args=[1]),
+                reverse('swot_item_vote:get_post', args=[1]),
                 content_type='application/json'
             ).json())
         )

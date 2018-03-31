@@ -14,76 +14,108 @@ class SimpleVoteTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
     auth_data = {
         'user': {
+            'userId': 5,
             'email': 'imran.ariffin@liveswot.com',
             'password': 'katakunci'
         }
     }
+    vote_up = {
+        'voteType': 'up',
+    }
 
     def setUp(self):
-        self.vote_up = {'voteType': 'up', }
-
         testutils.setuptoken(self, self.auth_data, client)
 
-    def test_vote_non_existing_item_should_repond_404(self):
-        response = client.post(
-            reverse('get_post_vote', args=[99]),
-            data=json.dumps(self.vote_up),
+    def test_get_all_votes_return_success_response_data_with_a_list(self):
+        response = client.get(
+            reverse('swot_item_vote:get_post', args=[1]),
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(type(response.data), dict)
+        self.assertEqual(type(response.data['data']), list)
 
     def test_create_new_vote(self):
         item_id = 1
 
         response = client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json(), {
-            'vote': 1,
-            'last_vote': {
-                'id': 1,
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {
+            'data': {
+                'swotItemId': item_id,
+                'userId': self.auth_data['user']['userId'],
                 'voteType': 'up',
-                'item': item_id,
-            },
+            }
         })
 
     def test_get_all_votes_should_return_empty_list_when_no_vote(self):
         response = client.get(
-            reverse('get_post_vote', args=[1]),
+            reverse('swot_item_vote:get_post', args=[1]),
             content_type='application/json',
         )
 
-        self.assertEqual(0, len(response.json()))
+        response_data = response.data
+
+        self.assertEqual(0, len(response_data['data']))
 
     def test_get_all_votes_should_return_list_with_the_vote_when_one_vote(self):
         client.post(
-            reverse('get_post_vote', args=[1]),
+            reverse('swot_item_vote:get_post', args=[1]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
 
         response = client.get(
-            reverse('get_post_vote', args=[1]),
-            content_type='application/json',
+            reverse('swot_item_vote:get_post', args=[1]),
         )
 
-        self.assertEqual(1, len(response.json()))
+        self.assertEqual(1, len(response.json()['data']))
+
+
+class ErrorVotesTestCase(TestCase):
+    fixtures = ['users.json', 'swots.json', 'swotItems.json']
+    auth_data = {
+        'user': {
+            'userId': 5,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+    vote_up = {
+        'voteType': 'up',
+    }
+
+    def setUp(self):
+        testutils.setuptoken(self, self.auth_data, client)
+
+    def test_vote_non_existing_item_should_repond_404(self):
+        response = client.post(
+            reverse('swot_item_vote:get_post', args=[99]),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class MultipleVotesTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
     auth_data = {
         'user': {
+            'userId': 5,
             'email': 'imran.ariffin@liveswot.com',
             'password': 'katakunci'
         }
     }
 
     def setUp(self):
-        self.vote_up = {'voteType': 'up', }
+        self.vote_up = {
+            'voteType': 'up',
+        }
         self.vote_down = {'voteType': 'down', }
 
         testutils.setuptoken(self, self.auth_data, client)
@@ -93,46 +125,42 @@ class MultipleVotesTestCase(TestCase):
 
         # first post
         client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
 
         # second post
         response = client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json(), {
-            'vote': 0,
-            'last_vote': None,
-        })
+        self.assertEqual(response.data, {'data': {}})
 
     def test_vote_up_then_vote_down_should_delete_up_and_create_down(self):
         item_id = 1
 
         client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
 
         response = client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_down),
             content_type='application/json',
         )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json(), {
-            'vote': -1,
-            'last_vote': {
-                'id': 2,
-                'item': item_id,
-                'voteType': 'down'
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {
+            'data': {
+                'voteType': 'down',
+                'swotItemId': item_id,
+                'userId': self.auth_data['user']['userId'],
             }
         })
 
@@ -140,23 +168,22 @@ class MultipleVotesTestCase(TestCase):
         item_id = 1
 
         client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_down),
             content_type='application/json',
         )
 
         response = client.post(
-            reverse('get_post_vote', args=[item_id]),
+            reverse('swot_item_vote:get_post', args=[item_id]),
             data=json.dumps(self.vote_up),
             content_type='application/json',
         )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json(), {
-            'vote': 1,
-            'last_vote': {
-                'id': 2,
-                'item': item_id,
-                'voteType': 'up'
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data, {
+            'data': {
+                'voteType': 'up',
+                'swotItemId': item_id,
+                'userId': self.auth_data['user']['userId'],
             }
         })
