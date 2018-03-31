@@ -1,11 +1,13 @@
+from django.core.exceptions import ObjectDoesNotExist
+
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
 from swot.models import Swot
 from swot.serializers import SwotSerializer
-from core.decorators import authenticate
 
+from core.decorators import authenticate
 from core.serializers import deserialize
 
 
@@ -50,4 +52,52 @@ def swot_list(request):
 @authenticate
 @deserialize
 def swot_detail(request, swot_id):
-    return Response({}, status=status.HTTP_200_OK)
+    swot_id = int(swot_id)
+    swot = None
+
+    try:
+        swot = Swot.objects.get(id=swot_id)
+    except ObjectDoesNotExist:
+        return Response(
+            {'errors': ['Swot id={} does not exist']},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    user_id = request.user.id
+    owner_id = swot.owner.id
+
+    if user_id != owner_id:
+        return Response({
+            'errors': ['Only owner can delete swot']
+        }, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == 'DELETE':
+        try:
+            swot.delete()
+        except:
+            return Response({
+                'errors': ['Error occurred when deleting swot {}'.format(swot_id)],
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {'data': {}},
+            status=status.HTTP_204_NO_CONTENT
+        )
+    else:
+        data = request.body
+        if 'title' in data:
+            swot.title = data['title']
+        if 'description' in data:
+            swot.description = data['description']
+
+        try:
+            swot.save()
+        except:
+            return Response({
+                'errors': ['Error occurred when updating Swot {}'.format(swot_id)],
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({
+            'data': SwotSerializer(swot).data,
+        }, status=status.HTTP_200_OK)
+

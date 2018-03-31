@@ -142,28 +142,45 @@ class DeleteSwotTestCase(TestCase):
 
     def test_successful_delete_should_remove_swot_from_db(self):
 
-        # n = len(client.get(reverse('swot:get_post')).data['data'])
-        # self.assertNotEqual(n, 0)
-        #
-        # expected = n + 1
+        n = len(client.get(reverse('swot:get_post')).data['data'])
+        self.assertNotEqual(n, 0)
 
-
-        print reverse('swot:put_delete', args=[1])
+        expected = n - 1
 
         response = client.delete(
             reverse('swot:put_delete', args=[1]),
             content_type='application/json'
         )
-        # actual = len(client.get(reverse('swot:get_post')).data['data'])
-        #
+
+        actual = len(client.get(reverse('swot:get_post')).data['data'])
+
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        # self.assertEqual(actual, expected)
+        self.assertEqual(actual, expected)
 
-    def test_only_owner_can_delete(self):
-        pass
+    def test_non_owner_can_not_delete(self):
+        response = client.delete(
+            reverse('swot:put_delete', args=[4]),
+            content_type='application/json'
+        )
 
-    def test_respond_400_for_non_authenticated_request(self):
-        pass
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(len(response.data['errors']), 1)
+        self.assertEqual(response.data['errors'][0], 'Only owner can delete swot')
+
+    def test_respond_403_for_non_authenticated_request(self):
+        client.credentials(HTTP_AUTHORIZATION='')
+
+        response = client.delete(
+            reverse('swot:put_delete', args=[4]),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_respond_404_for_non_existing_swot(self):
-        pass
+        response = client.delete(
+            reverse('swot:put_delete', args=[999]),
+            content_type='application/json'
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

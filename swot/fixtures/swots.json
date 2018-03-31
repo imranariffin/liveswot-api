@@ -28,5 +28,15 @@
       "description": "Cheap phone for smart people",
       "owner": 5
     }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 4,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "Oppo",
+      "description": "Excellent phone by Asians for the world",
+      "owner": 2
+    }
   }
 ]
