@@ -26,7 +26,7 @@ class SimpleVoteTestCase(TestCase):
     def setUp(self):
         testutils.setuptoken(self, self.auth_data, client)
 
-    def test_get_all_votes_return_success_response_data_with_a_list(self):
+    def test_successful_get_should_respond_with_correct_response_shape(self):
         response = client.get(
             reverse('swot_item_vote:get_post', args=[1]),
             content_type='application/json',
@@ -35,6 +35,17 @@ class SimpleVoteTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(type(response.data), dict)
         self.assertEqual(type(response.data['data']), list)
+
+    def test_successful_post_should_respond_with_correct_response_shape(self):
+        response = client.post(
+            reverse('swot_item_vote:get_post', args=[2]),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(type(response.data), dict)
+        self.assertEqual(type(response.data['data']), dict)
 
     def test_create_new_vote(self):
         item_id = 1

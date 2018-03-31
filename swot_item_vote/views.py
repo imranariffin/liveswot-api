@@ -1,20 +1,16 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseNotFound, HttpResponseBadRequest
 
-from rest_framework import mixins, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from models import SwotItem, Vote
 from serializers import VoteSerializer
 
 from swot_item_vote.models import Vote
-from swot_item_vote.serializers import deserialize
-
 from swot_item.models import SwotItem
 
 from core.decorators import authenticate
+from core.serializers import deserialize
 
 
 @api_view(['GET', 'POST'])

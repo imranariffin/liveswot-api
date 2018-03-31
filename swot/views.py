@@ -6,9 +6,12 @@ from swot.models import Swot
 from swot.serializers import SwotSerializer
 from core.decorators import authenticate
 
+from core.serializers import deserialize
+
 
 @api_view(['GET', 'POST'])
 @authenticate
+@deserialize
 def swot_list(request):
     if request.method == 'GET':
         user = request.user
@@ -20,4 +23,24 @@ def swot_list(request):
             status=status.HTTP_200_OK
         )
 
-    return Response({}, status=status.HTTP_201_CREATED)
+    user_id = request.user.id
+    title = request.body['title']
+    description = request.body['title']
+    swot = None
+
+    try:
+        swot = Swot(owner_id=user_id, title=title, description=description)
+        swot.save()
+    except:
+        return Response({
+            'errors': ['Error occured when creating swot']
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({
+        'data': {
+            'swotId': swot.id,
+            'userId': user_id,
+            'title': title,
+            'description': description,
+        }
+    }, status=status.HTTP_201_CREATED)
