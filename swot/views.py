@@ -44,3 +44,10 @@ def swot_list(request):
             'description': description,
         }
     }, status=status.HTTP_201_CREATED)
+
+
+@api_view(['PUT', 'DELETE'])
+@authenticate
+@deserialize
+def swot_detail(request, swot_id):
+    return Response({}, status=status.HTTP_200_OK)

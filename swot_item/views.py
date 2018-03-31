@@ -13,7 +13,7 @@ from swot_item.serializers import SwotItemSerializer, serialize_request
 @api_view(http_method_names=['GET', 'POST'])
 @authentication_classes((IsAuthenticated,))
 @serialize_request
-def swot_list(request):
+def swot_item_list(request):
     if request.method == 'GET':
         swots = SwotItem.objects.all()
         serialized = [SwotItemSerializer(swot).data for swot in swots]
@@ -40,7 +40,7 @@ def swot_list(request):
 
 @api_view(['PUT', 'DELETE'])
 @authentication_classes((IsAuthenticated,))
-def swot_detail(request, pk):
+def swot_item_detail(request, pk):
 
     if request.method == 'PUT':
 

@@ -125,3 +125,45 @@ class PostSwotTestCase(TestCase):
         ).data['data'])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(actual, expected)
+
+
+class DeleteSwotTestCase(TestCase):
+    fixtures = ['users.json', 'swots.json']
+    auth_data = {
+        'user': {
+            'id': 100,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+
+    def setUp(self):
+        testutils.setuptoken(self, self.auth_data, client)
+
+    def test_successful_delete_should_remove_swot_from_db(self):
+
+        # n = len(client.get(reverse('swot:get_post')).data['data'])
+        # self.assertNotEqual(n, 0)
+        #
+        # expected = n + 1
+
+
+        print reverse('swot:put_delete', args=[1])
+
+        response = client.delete(
+            reverse('swot:put_delete', args=[1]),
+            content_type='application/json'
+        )
+        # actual = len(client.get(reverse('swot:get_post')).data['data'])
+        #
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        # self.assertEqual(actual, expected)
+
+    def test_only_owner_can_delete(self):
+        pass
+
+    def test_respond_400_for_non_authenticated_request(self):
+        pass
+
+    def test_respond_404_for_non_existing_swot(self):
+        pass

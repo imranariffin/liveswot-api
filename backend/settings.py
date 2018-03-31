@@ -46,6 +46,15 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+CORS_ALLOW_METHODS = (
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+        'DELETE',
+        'OPTIONS',
+    )
+
 CORS_ORIGIN_WHITELIST = (
     # 'hostname.example.com',
     'localhost:3000',
