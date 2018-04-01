@@ -6,4 +6,4 @@ from models import Vote
 class VoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vote
-        fields = ('id', 'item', 'voteType')
+        fields = ('id', 'item', 'voteType', 'created_by_id')

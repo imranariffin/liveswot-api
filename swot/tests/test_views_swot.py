@@ -75,7 +75,7 @@ class GetSwotTestCase(TestCase):
         user = self.auth_data['user']
 
         self.assertTrue(
-            all([user['id'] != swot['owner'] for swot in response_data])
+            all([user['id'] != swot['created_by_id'] for swot in response_data])
         )
 
     def test_get_swots_without_token_should_error(self):
@@ -157,7 +157,7 @@ class DeleteSwotTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(actual, expected)
 
-    def test_non_owner_can_not_delete(self):
+    def test_non_creator_can_not_delete(self):
         response = client.delete(
             reverse('swot:put_delete', args=[4]),
             content_type='application/json'
@@ -165,7 +165,7 @@ class DeleteSwotTestCase(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(len(response.data['errors']), 1)
-        self.assertEqual(response.data['errors'][0], 'Only owner can delete swot')
+        self.assertEqual(response.data['errors'][0], 'Only creator can delete swot')
 
     def test_respond_403_for_non_authenticated_request(self):
         client.credentials(HTTP_AUTHORIZATION='')

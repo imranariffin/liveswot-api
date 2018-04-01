@@ -6,4 +6,4 @@ from swot.models import Swot
 class SwotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Swot
-        fields = ('id', 'title', 'description', 'owner',)
+        fields = ('id', 'title', 'description', 'created_by_id',)

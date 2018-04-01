@@ -6,7 +6,7 @@
       "created": "2017-09-04",
       "title": "iPhone 200",
       "description": "The phone with biggest fanboy army",
-      "owner": 5
+      "created_by": 5
     }
   },
   {
@@ -16,7 +16,7 @@
       "created": "2017-09-04",
       "title": "Samsung S100",
       "description": "The coolest phone ever",
-      "owner": 5
+      "created_by_id": 5
     }
   },
   {
@@ -26,7 +26,7 @@
       "created": "2017-09-04",
       "title": "Moto 3",
       "description": "Cheap phone for smart people",
-      "owner": 5
+      "created_by_id": 5
     }
   },
   {
@@ -36,7 +36,7 @@
       "created": "2017-09-04",
       "title": "Oppo",
       "description": "Excellent phone by Asians for the world",
-      "owner": 2
+      "created_by_id": 2
     }
   }
 ]

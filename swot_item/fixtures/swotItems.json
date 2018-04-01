@@ -6,6 +6,7 @@
       "created": "2017-09-04",
       "cardType": "strength",
       "text": "Strength item #1",
+      "created_by_id": 5,
       "swot": 1
     }
   },
@@ -16,6 +17,7 @@
       "created": "2017-09-04",
       "cardType": "weakness",
       "text": "Weakness item #1",
+      "created_by_id": 5,
       "swot": 1
     }
   },
@@ -26,6 +28,7 @@
       "created": "2017-09-04",
       "cardType": "strength",
       "text": "Strength item #2 voted once",
+      "created_by_id": 2,
       "swot": 1
     }
   }

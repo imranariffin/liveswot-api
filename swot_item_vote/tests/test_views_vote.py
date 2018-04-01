@@ -59,10 +59,32 @@ class SimpleVoteTestCase(TestCase):
         self.assertEqual(response.data, {
             'data': {
                 'swotItemId': item_id,
-                'userId': self.auth_data['user']['userId'],
+                'creatorId': self.auth_data['user']['userId'],
                 'voteType': 'up',
             }
         })
+
+    def test_create_new_vote_success_should_successfully_save(self):
+        item_id = 2
+
+        n = len(client.get(
+            reverse('swot_item_vote:get_post', args=[item_id]),
+            content_type='applicatoin/json'
+        ).data['data'])
+
+        client.post(
+            reverse('swot_item_vote:get_post', args=[item_id]),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        )
+
+        expected = n + 1
+        actual = len(client.get(
+            reverse('swot_item_vote:get_post', args=[item_id]),
+            content_type='applicatoin/json'
+        ).data['data'])
+
+        self.assertEqual(actual, expected)
 
     def test_get_all_votes_should_return_empty_list_when_no_vote(self):
         response = client.get(
@@ -171,7 +193,7 @@ class MultipleVotesTestCase(TestCase):
             'data': {
                 'voteType': 'down',
                 'swotItemId': item_id,
-                'userId': self.auth_data['user']['userId'],
+                'creatorId': self.auth_data['user']['userId'],
             }
         })
 
@@ -195,6 +217,6 @@ class MultipleVotesTestCase(TestCase):
             'data': {
                 'voteType': 'up',
                 'swotItemId': item_id,
-                'userId': self.auth_data['user']['userId'],
+                'creatorId': self.auth_data['user']['userId'],
             }
         })

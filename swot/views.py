@@ -17,7 +17,7 @@ from core.serializers import deserialize
 def swot_list(request):
     if request.method == 'GET':
         user = request.user
-        swots = Swot.objects.filter(owner_id=user.id)
+        swots = Swot.objects.filter(created_by_id=user.id)
         serialized = [SwotSerializer(swot).data for swot in swots]
 
         return Response(
@@ -31,7 +31,7 @@ def swot_list(request):
     swot = None
 
     try:
-        swot = Swot(owner_id=user_id, title=title, description=description)
+        swot = Swot(created_by_id=user_id, title=title, description=description)
         swot.save()
     except:
         return Response({
@@ -64,11 +64,11 @@ def swot_detail(request, swot_id):
         )
 
     user_id = request.user.id
-    owner_id = swot.owner.id
+    creator_id = swot.created_by_id
 
-    if user_id != owner_id:
+    if user_id != creator_id:
         return Response({
-            'errors': ['Only owner can delete swot']
+            'errors': ['Only creator can delete swot']
         }, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'DELETE':

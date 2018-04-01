@@ -18,9 +18,10 @@ from core.serializers import deserialize
 @deserialize
 def vote_list(request, swot_item_id):
     swot_item_id = int(swot_item_id)
+    user_id = request.user.id
 
     if request.method == 'GET':
-        votes = Vote.objects.filter(item__swot_id=swot_item_id)
+        votes = Vote.objects.filter(item_id=swot_item_id, created_by_id=user_id)
         serialized = [VoteSerializer(vote).data for vote in votes]
 
         return Response(
@@ -28,25 +29,25 @@ def vote_list(request, swot_item_id):
             status=status.HTTP_200_OK)
     else:
         try:
-            swot_item = SwotItem.objects.get(pk=swot_item_id)
+            swot_item = SwotItem.objects.get(id=swot_item_id)
         except ObjectDoesNotExist:
             return Response(
                 {'errors': ['Swot Item {} does not exist'.format(swot_item_id)]},
                 status=status.HTTP_404_NOT_FOUND)
 
         vote_type = request.body['voteType']
-        user_id = request.user.id
 
         try:
-            existing_vote = Vote.objects.get(item__swot_id=swot_item_id)
+            existing_vote = Vote.objects.get(item_id=swot_item_id)
+            existing_vote_type = existing_vote.voteType
             existing_vote.delete()
 
-            if existing_vote.voteType == vote_type:
+            if existing_vote_type == vote_type:
                 return Response({'data': {}}, status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             pass
 
-        vote = Vote(item=swot_item, voteType=vote_type)
+        vote = Vote(created_by_id=user_id, item=swot_item, voteType=vote_type)
 
         try:
             vote.save()
@@ -58,7 +59,7 @@ def vote_list(request, swot_item_id):
         return Response({
             'data': {
                 'swotItemId': swot_item_id,
-                'userId': user_id,
+                'creatorId': user_id,
                 'voteType': vote_type,
             }
         }, status=status.HTTP_201_CREATED)
