@@ -37,28 +37,23 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
-    'rest_framework',
-
     'swot.apps.SwotConfig',
+    'swot_item.apps.SwotItemConfig',
+    'swot_item_vote.apps.SwotItemVoteConfig',
+    'rest_framework',
     'authenticationjwt.apps.AuthenticationjwtConfig',
 ]
 
 SITE_ID = 1
 
-REST_FRAMEWORK = {
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    # 	'rest_framework.permissions.IsAuthenticated',
-    # ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'authenticationjwt.backends.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ],
-    'EXCEPTION_HANDLER': 'core.exceptions.core_exception_handler',
-    'NON_FIELD_ERRORS_KEY': 'error',
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
-}
+CORS_ALLOW_METHODS = (
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+        'DELETE',
+        'OPTIONS',
+    )
 
 CORS_ORIGIN_WHITELIST = (
     # 'hostname.example.com',

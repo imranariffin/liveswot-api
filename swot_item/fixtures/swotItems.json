@@ -1,0 +1,35 @@
+[
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 1,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "strength",
+      "text": "Strength item #1",
+      "created_by_id": 5,
+      "swot_id": 1
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 2,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "weakness",
+      "text": "Weakness item #1",
+      "created_by_id": 5,
+      "swot_id": 1
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 3,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "strength",
+      "text": "Strength item #2 voted once",
+      "created_by_id": 2,
+      "swot_id": 1
+    }
+  }
+]

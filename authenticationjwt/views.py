@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.serializers import ValidationError
 
 from .renderers import UserJSONRenderer
 from .serializers import RegistrationSerializer, LoginSerializer
@@ -13,10 +14,17 @@ class RegistrationAPIView(APIView):
     serializer_class = RegistrationSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
 
+        user = request.data.get('user', {})
         serializer = self.serializer_class(data=user)
-        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as ve:
+            return Response(
+                {'errors': [msg for msg in ve.detail['non_field_errors']]},
+                status=ve.status_code)
+
         serializer.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -28,9 +36,15 @@ class LoginAPIView(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-        user = request.data.get('user', {})
 
+        user = request.data.get('user', {})
         serializer = self.serializer_class(data=user)
-        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as ve:
+            return Response(
+                {'errors': [msg for msg in ve.detail['non_field_errors']]},
+                status=ve.status_code)
 
         return Response(serializer.data, status=status.HTTP_200_OK)

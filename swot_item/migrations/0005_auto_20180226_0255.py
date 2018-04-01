@@ -8,7 +8,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('swot', '0004_change_name_swot_item'),
+        ('swot_item', '0004_change_name_swot_item'),
     ]
 
     operations = [
@@ -35,6 +35,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='vote',
             name='item',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='swot.Item'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='swot_item.Item'),
         ),
     ]
