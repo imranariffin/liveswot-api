@@ -4,6 +4,8 @@ from authenticationjwt.models import User
 
 from swot_item.models import SwotItem
 
+from swot.models import Swot
+
 
 class Vote(models.Model):
     VOTE_TYPES = (('up', 'UP'), ('down', 'DOWN'))
@@ -19,7 +21,13 @@ class Vote(models.Model):
                                    null=True,
                                    related_name='+',
                                    related_query_name='+')
-    item = models.ForeignKey(SwotItem,
+    swot_item = models.ForeignKey(SwotItem,
+                             on_delete=models.SET_NULL,
+                             blank=False,
+                             null=True,
+                             related_name='+',
+                             related_query_name='+')
+    swot = models.ForeignKey(Swot,
                              on_delete=models.SET_NULL,
                              blank=False,
                              null=True,

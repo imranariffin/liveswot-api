@@ -15,11 +15,11 @@ urlpatterns = [
         include('authenticationjwt.urls', namespace='authenticationjwt')
     ),
     url(
-        r'^api/swots/items/(?P<swot_item_id>[0-9]+)/votes/',
+        r'^api/swots/',
         include('swot_item_vote.urls', namespace='swot_item_vote')
     ),
     url(
-        r'^api/swots/items/$',
+        r'^api/swots/(?P<swot_id>[0-9]+)/items/$',
         swotitemviews.swot_item_list,
         name='get_post_swot_item',
     ),

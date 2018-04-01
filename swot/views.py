@@ -18,7 +18,12 @@ def swot_list(request):
     if request.method == 'GET':
         user = request.user
         swots = Swot.objects.filter(created_by_id=user.id)
-        serialized = [SwotSerializer(swot).data for swot in swots]
+        serialized = [{
+            'swotId': swot.id,
+            'creatorId': user.id,
+            'title': swot.title,
+            'description': swot.description,
+        } for swot in swots]
 
         return Response(
             {'data': serialized},
@@ -28,7 +33,6 @@ def swot_list(request):
     user_id = request.user.id
     title = request.body['title']
     description = request.body['title']
-    swot = None
 
     try:
         swot = Swot(created_by_id=user_id, title=title, description=description)
@@ -41,9 +45,9 @@ def swot_list(request):
     return Response({
         'data': {
             'swotId': swot.id,
-            'userId': user_id,
-            'title': title,
-            'description': description,
+            'creatorId': swot.created_by_id,
+            'title': swot.title,
+            'description': swot.description,
         }
     }, status=status.HTTP_201_CREATED)
 
@@ -98,6 +102,11 @@ def swot_detail(request, swot_id):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({
-            'data': SwotSerializer(swot).data,
+            'data': {
+                'swotId': swot.id,
+                'creatorId': swot.created_by_id,
+                'title': swot.title,
+                'description': swot.description,
+            }
         }, status=status.HTTP_200_OK)
 

@@ -24,5 +24,5 @@ class ItemTestCase(TestCase):
 
     def test_vote_has_one_item(self):
         item1 = SwotItem.objects.filter(text=ITEM_1_TEXT).first()
-        vote = Vote.objects.create(item=item1)
-        self.assertEqual(vote.item.id, item1.id)
+        vote = Vote.objects.create(swot_item_id=item1.id)
+        self.assertEqual(vote.swot_item.id, item1.id)

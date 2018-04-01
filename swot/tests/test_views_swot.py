@@ -10,7 +10,52 @@ from utils import testutils
 client = APIClient()
 
 
-class SimpleSwotTestCase(TestCase):
+class SimpleGetSwotTestCase(TestCase):
+    fixtures = ['users.json', 'swots.json']
+    auth_data = {
+        'user': {
+            'id': 100,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+
+    def setUp(self):
+        testutils.setuptoken(self, self.auth_data, client)
+
+    def test_successful_get_swots_should_respond_with_correct_shape(self):
+        response = client.get(
+            reverse('swot:get_post', kwargs={}),
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(type(response.data), dict)
+
+        response_data = response.data['data']
+        self.assertEqual(type(response_data), list)
+
+    def test_successful_get_swots_should_respond_with_correct_information(self):
+        response_data = client.get(
+            reverse('swot:get_post', kwargs={}),
+        ).data['data']
+
+        self.assertTrue(all(['swotId' in swot for swot in response_data]))
+        self.assertTrue(all(['creatorId' in swot for swot in response_data]))
+        self.assertTrue(all(['title' in swot for swot in response_data]))
+        self.assertTrue(all(['description' in swot for swot in response_data]))
+
+    def test_successful_get_swots_should_respond_with_correct_types(self):
+        res_data = client.get(
+            reverse('swot:get_post', kwargs={}),
+        ).data['data']
+
+        self.assertTrue(all([type(swot['swotId']) == int for swot in res_data]))
+        self.assertTrue(all([type(swot['creatorId']) == int for swot in res_data]))
+        self.assertTrue(all([type(swot['title']) == unicode for swot in res_data]))
+        self.assertTrue(all([type(swot['description']) == unicode for swot in res_data]))
+
+
+class SimplePostSwotTestCase(TestCase):
     fixtures = ['users.json', 'swots.json']
     auth_data = {
         'user': {
@@ -27,15 +72,6 @@ class SimpleSwotTestCase(TestCase):
     def setUp(self):
         testutils.setuptoken(self, self.auth_data, client)
 
-    def test_successful_get_swots_should_respond_with_correct_shape(self):
-        response = client.get(
-            reverse('swot:get_post', kwargs={}),
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(type(response.data), dict)
-        self.assertEqual(type(response.data['data']), list)
-
     def test_successful_post_swot_should_respond_with_correct_shape(self):
         response = client.post(
             reverse('swot:get_post', kwargs={}),
@@ -44,6 +80,107 @@ class SimpleSwotTestCase(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(type(response.data), dict)
+        self.assertEqual(type(response.data['data']), dict)
+
+    def test_successful_post_swots_should_respond_with_correct_information(self):
+        response_data = client.post(
+            reverse('swot:get_post', kwargs={}),
+            data=json.dumps(self.post_data),
+            content_type='application/json'
+        ).data['data']
+
+        self.assertTrue('swotId' in response_data)
+        self.assertTrue('creatorId' in response_data)
+        self.assertTrue('title' in response_data)
+        self.assertTrue('description' in response_data)
+
+    def test_successful_post_swots_should_respond_with_correct_types(self):
+        res_data = client.post(
+            reverse('swot:get_post', kwargs={}),
+            data=json.dumps(self.post_data),
+            content_type='application/json'
+        ).data['data']
+
+        self.assertTrue(type(res_data['swotId']) == int)
+        self.assertTrue(type(res_data['creatorId']) == int)
+        self.assertTrue(type(res_data['title']) == unicode)
+        self.assertTrue(type(res_data['description']) == unicode)
+
+
+class SimplePutSwotTestCase(TestCase):
+    fixtures = ['users.json', 'swots.json']
+    auth_data = {
+        'user': {
+            'id': 100,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+    put_data = {
+        'title': 'Some title',
+        'description': 'Some description',
+    }
+
+    def setUp(self):
+        testutils.setuptoken(self, self.auth_data, client)
+
+    def test_successful_put_swot_should_respond_with_correct_shape(self):
+        response = client.put(
+            reverse('swot:put_delete', args=[1]),
+            data=json.dumps(self.put_data),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(type(response.data), dict)
+        self.assertEqual(type(response.data['data']), dict)
+
+    def test_successful_put_swots_should_respond_with_correct_information(self):
+        response_data = client.put(
+            reverse('swot:put_delete', args=[1]),
+            data=json.dumps(self.put_data),
+            content_type='application/json'
+        ).data['data']
+
+        self.assertTrue('swotId' in response_data)
+        self.assertTrue('creatorId' in response_data)
+        self.assertTrue('title' in response_data)
+        self.assertTrue('description' in response_data)
+
+    def test_successful_put_swots_should_respond_with_correct_types(self):
+        res_data = client.put(
+            reverse('swot:put_delete', args=[1]),
+            data=json.dumps(self.put_data),
+            content_type='application/json'
+        ).data['data']
+
+        self.assertTrue(type(res_data['swotId']) == int)
+        self.assertTrue(type(res_data['creatorId']) == int)
+        self.assertTrue(type(res_data['title']) == unicode)
+        self.assertTrue(type(res_data['description']) == unicode)
+
+
+class SimpleDeleteSwotTestCase(TestCase):
+    fixtures = ['users.json', 'swots.json']
+    auth_data = {
+        'user': {
+            'id': 100,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+
+    def setUp(self):
+        testutils.setuptoken(self, self.auth_data, client)
+
+    def test_successful_put_swot_should_respond_with_correct_shape(self):
+        response = client.delete(
+            reverse('swot:put_delete', args=[1]),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(type(response.data), dict)
         self.assertEqual(type(response.data['data']), dict)
 
@@ -75,7 +212,7 @@ class GetSwotTestCase(TestCase):
         user = self.auth_data['user']
 
         self.assertTrue(
-            all([user['id'] != swot['created_by_id'] for swot in response_data])
+            all([user['id'] != swot['creatorId'] for swot in response_data])
         )
 
     def test_get_swots_without_token_should_error(self):
