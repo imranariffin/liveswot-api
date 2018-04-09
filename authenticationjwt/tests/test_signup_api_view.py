@@ -9,7 +9,7 @@ from rest_framework import status
 client = Client()
 
 
-class SignUpAPIViewStatusCodeTestCase(TestCase):
+class SignupStatusCodeTestCase(TestCase):
     fixtures = ['users.json']
 
     def test_signup_empty_password_returns_400(self):
@@ -68,7 +68,7 @@ class SignUpAPIViewStatusCodeTestCase(TestCase):
             content_type='application/json',
             data=json.dumps({
                 'user': {
-                    'email': 'invalid.email',
+                    'email': 'some.valid.email@gmail.com',
                     'username': 'valid.username',
                     'password': 'short',
                 }}))
@@ -102,26 +102,58 @@ class SignUpAPIViewStatusCodeTestCase(TestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
 
-class SignUpAPIViewStatusCodeTestCase(TestCase):
+class SignupResponseDataTestCase(TestCase):
     fixtures = ['users.json']
+    valid_data1 = {'user': {
+        'email': 'valid.email1@mail.com',
+        'username': 'valid.username1',
+        'password': 'somevalidpassword',
+    }}
+    valid_data2 = {'user': {
+        'email': 'valid.email2@mail.com',
+        'username': 'valid.username2',
+        'password': 'somevalidpassword',
+    }}
+    valid_data3 = {'user': {
+        'email': 'valid.email3@mail.com',
+        'username': 'valid.username3',
+        'password': 'somevalidpassword',
+    }}
 
-    def test_sign_valid_returns_email_username_and_token(self):
+    def test_successful_signup_respond_with_correct_shape(self):
         response = client.post(
             reverse('authenticationjwt:signup'),
+            data=json.dumps(self.valid_data1),
             content_type='application/json',
-            data=json.dumps({
-                'user': {
-                    'email': 'valid.email2@mail.com',
-                    'username': 'valid.username2',
-                    'password': 'somevalidpassword',
-                }}))
+        )
 
-        user = response.data
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(type(response.data), dict)
+        self.assertEqual(type(response.data['data']), dict)
 
-        self.assertIsNotNone(user)
-        self.assertIsNotNone(user['token'])
-        self.assertEqual(user['email'], 'valid.email2@mail.com')
-        self.assertEqual(user['username'], 'valid.username2')
+    def test_successful_signup_should_respond_with_correct_information(self):
+        response_data = client.post(
+            reverse('authenticationjwt:signup'),
+            data=json.dumps(self.valid_data2),
+            content_type='application/json',
+        ).data['data']
+
+        self.assertTrue('user' in response_data)
+        self.assertTrue('email' in response_data['user'])
+        self.assertTrue('username' in response_data['user'])
+        self.assertTrue('token' in response_data['user'])
+
+    def test_successful_signup_should_respond_with_correct_types(self):
+        res_data = client.post(
+            reverse('authenticationjwt:signup'),
+            data=json.dumps(self.valid_data3),
+            content_type='application/json'
+        ).data['data']
+
+        self.assertTrue(type(res_data['user']) == dict)
+        self.assertTrue(type(res_data['user']['email']) == unicode)
+        self.assertTrue(type(res_data['user']['username']) == unicode)
+        self.assertTrue(type(res_data['user']['token']) == unicode)
 
     def test_sign_valid_returns_token_with_id_and_expiration(self):
         response = client.post(
@@ -134,7 +166,7 @@ class SignUpAPIViewStatusCodeTestCase(TestCase):
                     'password': 'somevalidpassword',
                 }}))
 
-        user = response.data
+        user = response.data['data']['user']
 
         payload = None
         try:

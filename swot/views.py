@@ -5,7 +5,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 from swot.models import Swot
-from swot.serializers import SwotSerializer
 
 from core.decorators import authenticate
 from core.serializers import deserialize
