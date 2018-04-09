@@ -8,10 +8,11 @@ def setuptoken(self, auth_data, client):
     gettoken_response = client.post(
         reverse('authenticationjwt:login'),
         content_type="application/json",
-        data=json.dumps(auth_data))
+        data=json.dumps(auth_data)
+    ).data['data']
 
     client.credentials(
-        HTTP_AUTHORIZATION='Bearer ' + gettoken_response.data['token']
+        HTTP_AUTHORIZATION='Bearer ' + gettoken_response['user']['token']
     )
 
-    self.token = gettoken_response.data['token']
+    self.token = gettoken_response['user']['token']

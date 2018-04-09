@@ -1,4 +1,5 @@
-import re
+# import re
+import json
 
 from django.contrib.auth import authenticate
 from rest_framework import serializers
@@ -7,46 +8,53 @@ from rest_framework import status
 from .models import User
 
 
-email_validation = {'max_length': 255}
-password_validation = {
-    'max_length': 128,
-    'min_length': 8,
-    'write_only': True,
-}
-token_validation = {'max_length': 255, 'read_only': True}
+def deserialize(func):
+    def _deserialize(request, *args, **kwargs):
+        if request.method in ('POST', 'PUT',):
+            body = json.loads(request.body)
+
+            if 'username' not in body['user']:
+                email = body['user']['email']
+                body['user']['username'] = email[:email.find('@')]
+
+            request.body = body
+        return func(request, *args, **kwargs)
+    return _deserialize
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(**email_validation)
-    password = serializers.CharField(**password_validation)
-    token = serializers.CharField(**token_validation)
-
-    class Meta:
-        model = User
-        fields = ['email', 'username', 'password', 'token']
-
-    def validate(self, data):
-        # return super(RegistrationSerializer, self).validate(data)
-
-        email = data.get('email', None)
-
-        emailregex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-        if not re.match(emailregex, email):
-            raise serializers.ValidationError(
-                detail='Email is not valid',
-                code=status.HTTP_400_BAD_REQUEST)
-
-        return data
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+# class RegistrationSerializer(serializers.ModelSerializer):
+#     email = serializers.CharField(**email_validation)
+#     password = serializers.CharField(**password_validation)
+#     token = serializers.CharField(**token_validation)
+#
+#     class Meta:
+#         model = User
+#         fields = ['email', 'username', 'password', 'token']
+#
+#     def validate(self, data):
+#         # return super(RegistrationSerializer, self).validate(data)
+#
+#         email = data.get('email', None)
+#
+#         emailregex = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
+#         if not re.match(emailregex, email):
+#             raise serializers.ValidationError(
+#                 detail='Email is not valid',
+#                 code=status.HTTP_400_BAD_REQUEST)
+#
+#         return data
+#
+#     def create(self, validated_data):
+#         return User.objects.create_user(**validated_data)
 
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=255, read_only=True)
     email = serializers.CharField()
     password = serializers.CharField(write_only=True)
-    token = serializers.CharField(**token_validation)
+    token = serializers.CharField(
+        # **token_validation
+    )
 
     class Meta:
         model = User
