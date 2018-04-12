@@ -14,28 +14,17 @@ class VoteModelTestCase(TestCase):
     def setUp(self):
         try:
             self.user = User.objects.get(email='imran.ariffin@liveswot.com', pk=5)
+            self.swot = Swot.objects.get(pk=1, created_by_id=5)
+            self.swot_item = SwotItem.objects.get(pk=1, swot_id=1)
+            self.vote = Vote.objects.get(pk=1, swot_item_id=1)
         except User.DoesNotExist, udne:
             self.assertTrue(False, udne)
-        print self.user
-
-        try:
-            self.swot = Swot.objects.get(pk=1, created_by_id=5)
         except Swot.DoesNotExist, sdne:
             self.assertTrue(False, sdne)
-        print self.swot
-
-        try:
-            self.swot_item = SwotItem.objects.get(pk=1, swot_id=1)
         except SwotItem.DoesNotExist, sidne:
             self.assertTrue(False, sidne)
-        print self.swot_item
-
-        try:
-            self.vote = Vote.objects.get(pk=1, swot_item_id=1)
         except Vote.DoesNotExist, vdne:
-            print 'Huh?'
             self.assertTrue(False, vdne)
-        print self.vote
 
         self.assertIsNotNone(self.user)
         self.assertIsNotNone(self.swot)
@@ -50,4 +39,4 @@ class VoteModelTestCase(TestCase):
                 created_by_id=self.user.id)
             self.assertTrue(False, "Integrity error expected to be thrown but not thrown")
         except IntegrityError:
-            self.assertTrue(True, "Integrity error thrown corectly")
+            self.assertTrue(True, "Integrity error thrown correctly")
