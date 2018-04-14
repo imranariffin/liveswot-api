@@ -48,6 +48,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(all(['swotId' in item for item in items]))
         self.assertTrue(all(['text' in item for item in items]))
         self.assertTrue(all(['cardType' in item for item in items]))
+        self.assertTrue(all(['score' in item for item in items]))
 
     def test_success_get_all_items_returns_correct_types(self):
         response = client.get(reverse('get_post_swot_item', kwargs={'swot_id': 1}))
@@ -58,6 +59,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(all([type(item['swotId']) == int for item in items]))
         self.assertTrue(all([type(item['text']) == unicode for item in items]))
         self.assertTrue(all([type(item['cardType']) == unicode for item in items]))
+        self.assertTrue(all([type(item['score']) == int for item in items]))
 
     def test_success_post_swot_items_returns_correct_shape(self):
         response = client.post(
@@ -98,6 +100,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(type(swot_item['creatorId']) == int)
         self.assertTrue(type(swot_item['text']) == unicode)
         self.assertTrue(type(swot_item['cardType']) == unicode)
+        self.assertTrue(type(swot_item['score']) == int)
 
     def test_success_delete_swot_item_returns_correct_shape(self):
         response = client.delete(
@@ -138,6 +141,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue('creatorId' in response_data)
         self.assertTrue('text' in response_data)
         self.assertTrue('cardType' in response_data)
+        self.assertTrue('score' in response_data)
 
     def test_success_put_swot_items_returns_correct_types(self):
         response = client.put(
@@ -153,6 +157,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(type(swot_item['creatorId']) == int)
         self.assertTrue(type(swot_item['text']) == unicode)
         self.assertTrue(type(swot_item['cardType']) == unicode)
+        self.assertTrue(type(swot_item['score']) == int)
 
 
 class GetSwotItemTestCase(TestCase):
