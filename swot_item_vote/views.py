@@ -15,6 +15,19 @@ from core.decorators import authenticate
 from core.serializers import deserialize
 
 
+def get_create_username(vote):
+    return User.objects.get(pk=vote.created_by_id).username,
+
+
+def get_creator_usernames(votes):
+    return dict([
+        (
+            vote.id,
+            get_create_username(vote)
+        ) for vote in votes
+    ])
+
+
 @api_view(['GET'])
 @authenticate
 @deserialize
@@ -30,12 +43,7 @@ def vote_list(request, swot_id):
         }, status=status.HTTP_404_NOT_FOUND)
 
     votes = Vote.objects.filter(swot_id=swot_id)
-    creator_usernames = dict([
-        (
-            vote.id,
-            User.objects.get(pk=vote.created_by_id).username,
-        ) for vote in votes
-    ])
+    creator_usernames = get_creator_usernames(votes)
 
     return Response({
         'data': [{
@@ -100,6 +108,7 @@ def vote(request, swot_item_id):
             'voteId': vote.id,
             'swotItemId': swot_item_id,
             'creatorId': user_id,
+            'creatorUsername': get_create_username(vote),
             'voteType': vote_type,
         }
     }, status=status.HTTP_201_CREATED)

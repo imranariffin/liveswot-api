@@ -117,6 +117,23 @@ class PostVoteTestCase(TestCase):
 
         Vote.objects.get(swot_item_id=swot_item_id).delete()
 
+    def test_successful_post_should_respond_with_correct_response_information(self):
+        # swot item with no vote
+        swot_item_id = 9
+        response_data = client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': swot_item_id}),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        ).data['data']
+
+        self.assertTrue('voteId' in response_data)
+        self.assertTrue('creatorId' in response_data)
+        self.assertTrue('creatorUsername' in response_data)
+        self.assertTrue('voteType' in response_data)
+        self.assertTrue('swotItemId' in response_data)
+
+        Vote.objects.get(swot_item_id=swot_item_id).delete()
+
     def test_create_new_vote(self):
         # item with no vote
         item_id = 9
