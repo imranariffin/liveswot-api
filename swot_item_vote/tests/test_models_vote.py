@@ -40,3 +40,4 @@ class VoteModelTestCase(TestCase):
             self.assertTrue(False, "Integrity error expected to be thrown but not thrown")
         except IntegrityError:
             self.assertTrue(True, "Integrity error thrown correctly")
+
