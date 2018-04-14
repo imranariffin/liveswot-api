@@ -1,0 +1,79 @@
+[
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 1,
+      "fields": {
+          "created": "2018-04-11T22:30:16.097Z",
+          "voteType": "up",
+          "created_by": 5,
+          "swot_item": 1,
+          "swot": 1
+      }
+  },
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 18,
+      "fields": {
+          "created": "2018-04-11T22:30:16.097Z",
+          "voteType": "up",
+          "created_by": 4,
+          "swot_item": 6,
+          "swot": 3
+      }
+  },
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 19,
+      "fields": {
+          "created": "2018-04-11T22:59:08.575Z",
+          "voteType": "up",
+          "created_by": 4,
+          "swot_item": 2,
+          "swot": 1
+      }
+  },
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 20,
+      "fields": {
+          "created": "2018-04-11T22:59:15.938Z",
+          "voteType": "up",
+          "created_by": 5,
+          "swot_item": 3,
+          "swot": 1
+      }
+  },
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 21,
+      "fields": {
+          "created": "2018-04-11T22:59:23.786Z",
+          "voteType": "down",
+          "created_by": 5,
+          "swot_item": 4,
+          "swot": 2
+      }
+  },
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 22,
+      "fields": {
+          "created": "2018-04-11T22:59:26.612Z",
+          "voteType": "down",
+          "created_by": 4,
+          "swot_item": 5,
+          "swot": 3
+      }
+  },
+  {
+      "model": "swot_item_vote.vote",
+      "pk": 23,
+      "fields": {
+          "created": "2018-04-11T23:00:50.927Z",
+          "voteType": "down",
+          "created_by": 4,
+          "swot_item": 8,
+          "swot": 1
+      }
+  }
+]

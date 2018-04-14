@@ -31,5 +31,49 @@
       "created_by_id": 2,
       "swot_id": 1
     }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 4,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "strength",
+      "text": "Kekuatan",
+      "created_by_id": 5,
+      "swot_id": 2
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 5,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "weakness",
+      "text": "Kelemahan BN",
+      "created_by_id": 5,
+      "swot_id": 3
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 6,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "opportunity",
+      "text": "Peluang HARAPAN",
+      "created_by_id": 5,
+      "swot_id": 3
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 8,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "opportunity",
+      "text": "Peluang terbaik",
+      "created_by_id": 3,
+      "swot_id": 1
+    }
   }
 ]

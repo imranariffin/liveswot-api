@@ -13,3 +13,9 @@ class Swot(models.Model):
                                    null=True,
                                    related_name='+',
                                    related_query_name='+')
+
+    def __str__(self):
+        return '[Swot id={}]'.format(self.id)
+
+    def __repr__(self):
+        return self.__str__()

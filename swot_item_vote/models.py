@@ -8,6 +8,9 @@ from swot.models import Swot
 
 
 class Vote(models.Model):
+    class Meta:
+        unique_together = (('created_by', 'swot_item'),)
+
     VOTE_TYPES = (('up', 'UP'), ('down', 'DOWN'))
 
     created = models.DateTimeField(auto_now_add=True)
@@ -22,14 +25,21 @@ class Vote(models.Model):
                                    related_name='+',
                                    related_query_name='+')
     swot_item = models.ForeignKey(SwotItem,
-                             on_delete=models.SET_NULL,
-                             blank=False,
-                             null=True,
-                             related_name='+',
-                             related_query_name='+')
+                                  on_delete=models.SET_NULL,
+                                  blank=False,
+                                  null=True,
+                                  related_name='+',
+                                  related_query_name='+')
     swot = models.ForeignKey(Swot,
                              on_delete=models.SET_NULL,
                              blank=False,
                              null=True,
                              related_name='+',
                              related_query_name='+')
+
+    def __str__(self):
+        return '[Vote id={}]'.format(self.id)
+
+    def __repr__(self):
+        return self.__str__()
+

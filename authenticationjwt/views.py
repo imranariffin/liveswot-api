@@ -35,7 +35,10 @@ def signup(request):
         pass
 
     try:
-        user = User(email=email, password=password)
+        user = User(
+            email=email,
+            password=password,
+            username=username)
         user.save()
     except:
         return Response({
@@ -83,7 +86,6 @@ def login(request):
             }
         }
     }, status=status.HTTP_200_OK)
-
 
 
 class LoginAPIView(APIView):

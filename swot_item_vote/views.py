@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -67,12 +68,19 @@ def vote(request, swot_item_id):
     except ObjectDoesNotExist:
         pass
 
-    vote = Vote(
-        created_by_id=user_id,
-        swot_item_id=swot_item_id,
-        swot_id=swot_item.swot_id,
-        voteType=vote_type
-    )
+    vote = None
+    try:
+        vote = Vote(
+            created_by_id=user_id,
+            swot_item_id=swot_item_id,
+            swot_id=swot_item.swot_id,
+            voteType=vote_type
+        )
+    except IntegrityError, ie:
+        return Response(
+            {'errors': [ie]},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     try:
         vote.save()

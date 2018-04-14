@@ -28,3 +28,9 @@ class SwotItem(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+    def __str__(self):
+        return '[SwotItem id={}]'.format(self.id)
+
+    def __repr__(self):
+        return self.__str__()
