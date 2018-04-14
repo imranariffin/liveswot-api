@@ -28,6 +28,7 @@ def swot_item_list(request, swot_id):
             'creatorId': swot_item.created_by_id,
             'text': swot_item.text,
             'cardType': swot_item.cardType,
+            'score': swot_item.score,
         } for swot_item in swot_items]
         return Response({'data': serialized})
     else:
@@ -48,6 +49,7 @@ def swot_item_list(request, swot_id):
             'creatorId': swot_item.created_by_id,
             'text': swot_item.text,
             'cardType': swot_item.cardType,
+            'score': swot_item.score,
         }}, status=status.HTTP_201_CREATED)
 
 
@@ -91,6 +93,7 @@ def swot_item_detail(request, swot_item_id):
                 'creatorId': user_id,
                 'text': swot_item.text,
                 'cardType': swot_item.cardType,
+                'score': swot_item.score,
             }
         }, status=status.HTTP_200_OK)
 
