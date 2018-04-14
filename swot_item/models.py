@@ -6,6 +6,7 @@ from authenticationjwt.models import User
 
 
 CARD_TYPES = ('strength', 'weakness', 'opportunity', 'threat',)
+INIT_SCORE = 0
 
 
 class SwotItem(models.Model):
@@ -25,6 +26,7 @@ class SwotItem(models.Model):
                              null=True,
                              related_name='+',
                              related_query_name='+')
+    score = models.IntegerField(default=INIT_SCORE, null=False, blank=False)
 
     class Meta:
         ordering = ('created',)

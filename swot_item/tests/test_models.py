@@ -2,13 +2,12 @@ import datetime
 
 from django.test import TestCase
 
-from swot_item.models import SwotItem
-from swot_item_vote.models import Vote
+from swot_item.models import SwotItem, INIT_SCORE
 
 ITEM_1_TEXT = 'Strength item #1'
 
 
-class ItemTestCase(TestCase):
+class SwotItemTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json']
 
     def setUp(self):
@@ -22,7 +21,11 @@ class ItemTestCase(TestCase):
         self.assertIn('created', dir(item1))
         self.assertIsInstance(item1.created, datetime.datetime)
 
-    def test_vote_has_one_item(self):
-        item1 = SwotItem.objects.filter(text=ITEM_1_TEXT).first()
-        vote = Vote.objects.create(swot_item_id=item1.id)
-        self.assertEqual(vote.swot_item.id, item1.id)
+    def test_has_default_score_value(self):
+        item = SwotItem.objects.create(
+            created_by_id=5,
+            swot_id=1,
+            text='I have not assigned an initial score value',
+        )
+
+        self.assertEqual(item.score, INIT_SCORE)
