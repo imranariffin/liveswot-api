@@ -5,12 +5,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 
-from serializers import VoteSerializer
-
 from swot_item_vote.models import Vote
 from swot_item.models import SwotItem
 
 from swot.models import Swot
+from authenticationjwt.models import User
 
 from core.decorators import authenticate
 from core.serializers import deserialize
@@ -31,6 +30,12 @@ def vote_list(request, swot_id):
         }, status=status.HTTP_404_NOT_FOUND)
 
     votes = Vote.objects.filter(swot_id=swot_id)
+    creator_usernames = dict([
+        (
+            vote.id,
+            User.objects.get(pk=vote.created_by_id).username,
+        ) for vote in votes
+    ])
 
     return Response({
         'data': [{
@@ -38,6 +43,7 @@ def vote_list(request, swot_id):
             'swotItemId': vote.swot_item_id,
             'creatorId': vote.created_by_id,
             'voteType': vote.voteType,
+            'creatorUsername': creator_usernames[vote.id],
         } for vote in votes]
     }, status=status.HTTP_200_OK)
 

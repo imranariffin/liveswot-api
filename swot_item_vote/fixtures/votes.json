@@ -1,17 +1,17 @@
 [
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 1,
       "fields": {
           "created": "2018-04-11T22:30:16.097Z",
           "voteType": "up",
-          "created_by": 5,
-          "swot_item": 1,
-          "swot": 1
+          "created_by_id": 5,
+          "swot_item_id": 1,
+          "swot_id": 1
       }
   },
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 18,
       "fields": {
           "created": "2018-04-11T22:30:16.097Z",
@@ -22,7 +22,7 @@
       }
   },
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 19,
       "fields": {
           "created": "2018-04-11T22:59:08.575Z",
@@ -33,7 +33,7 @@
       }
   },
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 20,
       "fields": {
           "created": "2018-04-11T22:59:15.938Z",
@@ -44,7 +44,7 @@
       }
   },
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 21,
       "fields": {
           "created": "2018-04-11T22:59:23.786Z",
@@ -55,7 +55,7 @@
       }
   },
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 22,
       "fields": {
           "created": "2018-04-11T22:59:26.612Z",
@@ -66,7 +66,7 @@
       }
   },
   {
-      "model": "swot_item_vote.vote",
+      "model": "swot_item_vote.Vote",
       "pk": 23,
       "fields": {
           "created": "2018-04-11T23:00:50.927Z",
@@ -75,5 +75,16 @@
           "swot_item": 8,
           "swot": 1
       }
+  },
+  {
+    "model": "swot_item_vote.Vote",
+    "pk": 24,
+    "fields": {
+        "created": "2018-04-11T23:00:50.927Z",
+        "voteType": "down",
+        "created_by": 4,
+        "swot_item": 10,
+        "swot": 6
+    }
   }
 ]

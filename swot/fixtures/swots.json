@@ -38,5 +38,35 @@
       "description": "Excellent phone by Asians for the world",
       "created_by_id": 2
     }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 5,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "Swot with no vote",
+      "description": "Swot with no vote sob sob",
+      "created_by_id": 5
+    }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 6,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "Swot with one vote only",
+      "description": "Swot with one vote only sob sob",
+      "created_by_id": 5
+    }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 7,
+    "fields": {
+      "created": "2017-09-04",
+      "title": "Swot with one item only",
+      "description": "Swot with one item only sob sob",
+      "created_by_id": 5
+    }
   }
 ]

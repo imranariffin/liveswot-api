@@ -75,5 +75,38 @@
       "created_by_id": 3,
       "swot_id": 1
     }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 9,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "opportunity",
+      "text": "Item with no vote",
+      "created_by_id": 5,
+      "swot_id": 1
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 10,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "strength",
+      "text": "Item with one vote only",
+      "created_by_id": 5,
+      "swot_id": 6
+    }
+  },
+  {
+    "model": "swot_item.SwotItem",
+    "pk": 11,
+    "fields": {
+      "created": "2017-09-04",
+      "cardType": "weakness",
+      "text": "Then only item in a swot, so lonely sob sob",
+      "created_by_id": 5,
+      "swot_id": 7
+    }
   }
 ]
