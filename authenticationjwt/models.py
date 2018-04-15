@@ -1,10 +1,12 @@
 from datetime import datetime, timedelta
 
 import jwt
+
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
 
@@ -21,6 +23,13 @@ class UserManager(BaseUserManager):
         user.save()
 
         return user
+
+    def create(self, username, email, password):
+        return self.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
 
     def create_superuser(self, username, email, password):
         if password is None:
@@ -70,3 +79,7 @@ class User(AbstractBaseUser):
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token.decode('utf-8')
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self._password = raw_password

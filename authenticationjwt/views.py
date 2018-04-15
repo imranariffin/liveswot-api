@@ -35,7 +35,7 @@ def signup(request):
         pass
 
     try:
-        user = User(
+        user = User.objects.create_user(
             email=email,
             password=password,
             username=username)
