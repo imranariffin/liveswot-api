@@ -16,7 +16,7 @@ from core.serializers import deserialize
 
 
 def get_create_username(vote):
-    return User.objects.get(pk=vote.created_by_id).username,
+    return User.objects.get(pk=vote.created_by_id).username
 
 
 def get_creator_usernames(votes):
@@ -73,7 +73,10 @@ def vote(request, swot_item_id):
         }, status=status.HTTP_404_NOT_FOUND)
 
     try:
-        existing_vote = Vote.objects.get(swot_item_id=swot_item_id)
+        existing_vote = Vote.objects.get(
+            swot_item_id=swot_item_id,
+            created_by_id=user_id
+        )
         existing_vote_type = existing_vote.voteType
         existing_vote.delete()
 

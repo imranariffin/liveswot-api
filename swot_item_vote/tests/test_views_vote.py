@@ -14,6 +14,13 @@ from utils import testutils
 client = APIClient()
 
 
+def delete_votes_in_item(item_id):
+    try:
+        [v.delete() for v in Vote.objects.filter(pk=item_id)]
+    except:
+        pass
+
+
 class ShapeVoteTestCase(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json', 'votes.json']
     auth_data = {
@@ -98,13 +105,15 @@ class PostVoteTestCase(TestCase):
     vote_up = {
         'voteType': 'up',
     }
+    no_vote_item_id = 9
 
     def setUp(self):
         testutils.setuptoken(self, self.auth_data, client)
+        delete_votes_in_item(self.no_vote_item_id)
 
     def test_successful_post_should_respond_with_correct_response_shape(self):
         # swot item with no vote
-        swot_item_id = 9
+        swot_item_id = self.no_vote_item_id
         response = client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': swot_item_id}),
             data=json.dumps(self.vote_up),
@@ -119,7 +128,7 @@ class PostVoteTestCase(TestCase):
 
     def test_successful_post_should_respond_with_correct_response_information(self):
         # swot item with no vote
-        swot_item_id = 9
+        swot_item_id = self.no_vote_item_id
         response_data = client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': swot_item_id}),
             data=json.dumps(self.vote_up),
@@ -134,9 +143,26 @@ class PostVoteTestCase(TestCase):
 
         Vote.objects.get(swot_item_id=swot_item_id).delete()
 
+    def test_successful_post_should_respond_with_correct_response_type(self):
+        # swot item with no vote
+        swot_item_id = self.no_vote_item_id
+        response_data = client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': swot_item_id}),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        ).data['data']
+
+        self.assertEqual(type(response_data['voteId']), int)
+        self.assertEqual(type(response_data['creatorId']), int)
+        self.assertEqual(type(response_data['creatorUsername']), unicode)
+        self.assertEqual(type(response_data['voteType']), unicode)
+        self.assertEqual(type(response_data['swotItemId']), int)
+
+        Vote.objects.get(swot_item_id=swot_item_id).delete()
+
     def test_create_new_vote(self):
         # item with no vote
-        item_id = 9
+        item_id = self.no_vote_item_id
 
         response = client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
@@ -274,6 +300,8 @@ class MultipleVotesTestCase(TestCase):
         self.assertEqual(res_data['swotItemId'], item_id)
         self.assertEqual(res_data['creatorId'], self.auth_data['user']['userId'])
 
+        Vote.objects.get(pk=res_data['voteId']).delete()
+
     def test_vote_down_then_vote_up_should_delete_down_and_create_up(self):
         item_id = 1
 
@@ -297,3 +325,91 @@ class MultipleVotesTestCase(TestCase):
         self.assertEqual(res_data['swotItemId'], item_id)
         self.assertEqual(res_data['creatorId'], self.auth_data['user']['userId'])
 
+
+class MultipleUsersVotesTestCase(TestCase):
+    fixtures = ['users.json', 'swots.json', 'swotItems.json', 'votes.json']
+    auth_data1 = {
+        'user': {
+            'userId': 5,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+    auth_data2 = {
+        'user': {
+            'userId': 4,
+            'email': 'testuser3@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+    no_vote_item_id = 9
+
+    def setUp(self):
+        self.vote_up = {'voteType': 'up'}
+        self.vote_down = {'voteType': 'down'}
+        delete_votes_in_item(self.no_vote_item_id)
+
+    def test_post_vote_should_return_appropriate_data_to_second_voter(self):
+        # item with no vote
+        item_id = self.no_vote_item_id
+
+        testutils.setuptoken(self, self.auth_data1, client)
+        response_data = client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
+            data=json.dumps(self.vote_down),
+            content_type='application/json',
+        ).data['data']
+        self.assertNotEqual(response_data, {})
+
+        testutils.setuptoken(self, self.auth_data2, client)
+        response_data = client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
+            data=json.dumps(self.vote_down),
+            content_type='application/json',
+        ).data['data']
+        self.assertNotEqual(response_data, {})
+
+    def test_post_vote_should_return_save_votes_by_multiple_users(self):
+        # item with no vote
+        item_id = self.no_vote_item_id
+        swot_id = 1
+        user_id1 = self.auth_data1['user']['userId']
+        user_id2 = self.auth_data1['user']['userId']
+
+        response_data = client.get(
+            reverse('swot_item_vote:get', kwargs={'swot_id': swot_id}),
+            content_type='application/json',
+        ).data['data']
+
+        self.assertTrue((user_id1, item_id) not in [
+            (v['creatorId'], v['swotItemId']) for v in response_data
+        ])
+        self.assertTrue((user_id1, item_id) not in [
+            (v['creatorId'], v['swotItemId']) for v in response_data
+        ])
+
+        testutils.setuptoken(self, self.auth_data1, client)
+        client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
+            data=json.dumps(self.vote_down),
+            content_type='application/json',
+        ).data['data']
+
+        testutils.setuptoken(self, self.auth_data2, client)
+        client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
+            data=json.dumps(self.vote_down),
+            content_type='application/json',
+        ).data['data']
+
+        response_data = client.get(
+            reverse('swot_item_vote:get', kwargs={'swot_id': swot_id}),
+            content_type='application/json',
+        ).data['data']
+
+        self.assertTrue((user_id1, item_id) in [
+            (v['creatorId'], v['swotItemId']) for v in response_data
+        ])
+        self.assertTrue((user_id2, item_id) in [
+            (v['creatorId'], v['swotItemId']) for v in response_data
+        ])
