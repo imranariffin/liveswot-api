@@ -173,5 +173,5 @@ class SignupResponseDataTestCase(TestCase):
             payload = jwt.decode(user['token'], settings.SECRET_KEY, algorithm='HS256')
         except:
             self.assertEqual(True, False)
-        self.assertIsInstance(payload['id'], int)
+        self.assertIsInstance(payload['userId'], int)
         self.assertIsInstance(payload['exp'], int)
