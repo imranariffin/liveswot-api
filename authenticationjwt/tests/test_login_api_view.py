@@ -170,4 +170,4 @@ class LoginTestCase(TestCase):
         self.assertEqual('imran.ariffin@liveswot.com', user['email'])
 
         payload = jwt.decode(user['token'], settings.SECRET_KEY, algorithm='HS256')
-        self.assertEqual(5, payload['id'])
+        self.assertEqual(5, payload['userId'])
