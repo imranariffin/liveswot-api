@@ -80,6 +80,7 @@ def login(request):
     return Response({
         'data': {
             'user': {
+                'userId': user.id,
                 'email': user.email,
                 'username': user.username,
                 'token': user.token,
@@ -105,4 +106,13 @@ class LoginAPIView(APIView):
                 {'errors': [msg for msg in ve.detail['non_field_errors']]},
                 status=ve.status_code)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({
+           'data': {
+               'user': {
+                   'userId': user.id,
+                   'email': user.email,
+                   'username': user.username,
+                   'token': user.token,
+               }
+           }
+        }, status=status.HTTP_200_OK)

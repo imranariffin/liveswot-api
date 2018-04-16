@@ -60,6 +60,7 @@ class LoginStatusCodeTestCase(TestCase):
             status.HTTP_400_BAD_REQUEST
         )
 
+
 class LoginResponseStructureTestCase(TestCase):
     fixtures = ['users.json']
 
@@ -94,6 +95,7 @@ class LoginResponseStructureTestCase(TestCase):
         self.assertTrue('email' in response_data['user'])
         self.assertTrue('username' in response_data['user'])
         self.assertTrue('token' in response_data['user'])
+        self.assertTrue('userId' in response_data['user'])
 
     def test_successful_login_should_respond_with_correct_types(self):
         response_data = client.post(
@@ -111,6 +113,7 @@ class LoginResponseStructureTestCase(TestCase):
         self.assertTrue(type(response_data['user']['email']) == unicode)
         self.assertTrue(type(response_data['user']['username']) == unicode)
         self.assertTrue(type(response_data['user']['token']) == unicode)
+        self.assertTrue(type(response_data['user']['userId']) == int)
 
 
 class LoginTestCase(TestCase):
