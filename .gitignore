@@ -8,9 +8,10 @@ local_settings.py
 .venv
 venv
 
+## Env vars ##
+scripts/set-env-vars.sh
+
 ## Database files ##
-postgres.environ.py
-django.environ.py
 db.sqlite3
 
 ## Intellij ###
