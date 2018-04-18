@@ -7,6 +7,10 @@ local_settings.py
 
 .venv
 venv
+
+## Database files ##
+postgres.environ.py
+django.environ.py
 db.sqlite3
 
 ## Intellij ###
