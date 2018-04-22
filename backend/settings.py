@@ -18,12 +18,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-# SECRET_KEY = 'c5==n^7_v++1d$w8^%^g!xulzc@9kz)s*99m@_x-%lb#1djd9t'
 SECRET_KEY = read_from_file('django_secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
 DEBUG = read_from_file('django_debug')
 
 ALLOWED_HOSTS = ['138.197.152.239', 'liveswot-api.com', 'www.liveswot-api.com']
@@ -98,10 +95,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# POSTGRES_USER = os.environ.get('POSTGRES_USER')
 POSTGRES_USER = read_from_file('postgres_user')
 
-#POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
 POSTGRES_PASSWORD = read_from_file('postgres_password')
 
 DATABASES = {
