@@ -16,3 +16,6 @@ db.sqlite3
 
 ## Intellij ###
 *.idea
+
+## django static folder ##
+static/
