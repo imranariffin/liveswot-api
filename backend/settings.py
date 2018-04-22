@@ -23,7 +23,12 @@ SECRET_KEY = read_from_file('django_secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = read_from_file('django_debug')
 
-ALLOWED_HOSTS = ['138.197.152.239', 'liveswot-api.com', 'www.liveswot-api.com']
+ALLOWED_HOSTS = [
+    '138.197.152.239',
+    'liveswot-api.com',
+    'www.liveswot-api.com',
+    'localhost'
+]
 
 # Application definition
 
@@ -55,9 +60,9 @@ CORS_ALLOW_METHODS = (
     )
 
 CORS_ORIGIN_WHITELIST = (
-    # 'hostname.example.com',
     'localhost:3000',
-    # '127.0.0.1:9000'
+    'www.liveswot.com',
+    'liveswot.com',
 )
 
 MIDDLEWARE = [
