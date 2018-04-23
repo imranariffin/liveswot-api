@@ -1,18 +1,13 @@
 from rest_framework import status
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.serializers import ValidationError
 from rest_framework.decorators import api_view
 
 from django.contrib.auth.hashers import check_password
 
-from .renderers import UserJSONRenderer
-from .serializers import LoginSerializer
 from .models import User
 from .validators import validate_signup, validate_login
 
-from .serializers import deserialize
+from .serializers import deserialize, serialize_response
 
 
 @api_view(['POST'])
@@ -59,6 +54,7 @@ def signup(request):
 @api_view(['POST'])
 @deserialize
 @validate_login
+@serialize_response
 def login(request):
     email = request.body['user']['email']
     password = request.body['user']['password']
@@ -68,51 +64,21 @@ def login(request):
     try:
         user = User.objects.get(email=email)
     except User.DoesNotExist:
-        return Response({
-            'errors': [email_password_error_msg]
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return (
+            None,
+            status.HTTP_400_BAD_REQUEST,
+            [email_password_error_msg],
+        )
 
     if not check_password(password, user.password):
-        return Response({
-            'errors': [email_password_error_msg]
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return (
+            None,
+            status.HTTP_400_BAD_REQUEST,
+            [email_password_error_msg],
+        )
 
-    return Response({
-        'data': {
-            'user': {
-                'userId': user.id,
-                'email': user.email,
-                'username': user.username,
-                'token': user.token,
-            }
-        }
-    }, status=status.HTTP_200_OK)
-
-
-class LoginAPIView(APIView):
-    permission_classes = (AllowAny,)
-    renderer_classes = (UserJSONRenderer,)
-    serializer_class = LoginSerializer
-
-    def post(self, request):
-
-        user = request.data.get('user', {})
-        serializer = self.serializer_class(data=user)
-
-        try:
-            serializer.is_valid(raise_exception=True)
-        except ValidationError as ve:
-            return Response(
-                {'errors': [msg for msg in ve.detail['non_field_errors']]},
-                status=ve.status_code)
-
-        return Response({
-           'data': {
-               'user': {
-                   'userId': user.id,
-                   'email': user.email,
-                   'username': user.username,
-                   'token': user.token,
-               }
-           }
-        }, status=status.HTTP_200_OK)
+    return (
+        user,
+        status.HTTP_200_OK,
+        None
+    )
