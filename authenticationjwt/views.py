@@ -13,6 +13,7 @@ from .serializers import deserialize, serialize_response
 @api_view(['POST'])
 @deserialize
 @validate_signup
+@serialize_response
 def signup(request):
     email = request.body['user']['email']
     username = request.body['user']['username']
@@ -20,12 +21,12 @@ def signup(request):
     user = None
 
     try:
-        user = User.objects.get(username=username)
-        return Response({
-            'data': {
-                'errors': ['Username `{}` already exist'.format(username)]
-            }
-        }, status=status.HTTP_400_BAD_REQUEST)
+        User.objects.get(username=username)
+        return (
+            None,
+            status.HTTP_400_BAD_REQUEST,
+            ['Username `{}` already exist'.format(username)],
+        )
     except User.DoesNotExist:
         pass
 
@@ -36,19 +37,17 @@ def signup(request):
             username=username)
         user.save()
     except:
-        return Response({
-            'errors': ['Error occurred when creating user']
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return (
+            None,
+            status.HTTP_400_BAD_REQUEST,
+            ['Error occurred when creating user'],
+        )
 
-    return Response({
-        'data': {
-            'user': {
-                'email': user.email,
-                'username': user.username,
-                'token': user.token,
-            }
-        }
-    }, status=status.HTTP_201_CREATED)
+    return (
+        user,
+        status.HTTP_201_CREATED,
+        None
+    )
 
 
 @api_view(['POST'])
