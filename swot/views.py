@@ -10,25 +10,46 @@ from core.decorators import authenticate
 from core.serializers import deserialize
 
 
+def serialize(func):
+    def _serialize(request, *args, **kwargs):
+        data, status, errors = func(request, *args, **kwargs)
+
+        if type(data) == list:
+            return Response({
+                'data': [{
+                    'swotId': swot.id,
+                    'creatorId': swot.created_by_id,
+                    'title': swot.title,
+                    'description': swot.description,
+            } for swot in data]}, status=status)
+
+        swot = data
+        return Response({
+            'data': {
+                'swotId': swot.id,
+                'creatorId': swot.created_by_id,
+                'title': swot.title,
+                'description': swot.description,
+        }}, status=status)
+    return _serialize
+
+
 @api_view(['GET', 'POST'])
 @authenticate
 @deserialize
+@serialize
 def swot_list(request):
     if request.method == 'GET':
         user = request.user
         swots = Swot.objects.filter(created_by_id=user.id)
-        serialized = [{
-            'swotId': swot.id,
-            'creatorId': user.id,
-            'title': swot.title,
-            'description': swot.description,
-        } for swot in swots]
 
-        return Response(
-            {'data': serialized},
-            status=status.HTTP_200_OK
+        return (
+            [swot for swot in swots],
+            status.HTTP_200_OK,
+            None
         )
 
+    swot = None
     user_id = request.user.id
     title = request.body['title']
     description = request.body['title']
@@ -37,23 +58,23 @@ def swot_list(request):
         swot = Swot(created_by_id=user_id, title=title, description=description)
         swot.save()
     except:
-        return Response({
-            'errors': ['Error occured when creating swot']
-        }, status=status.HTTP_400_BAD_REQUEST)
+        return (
+            None,
+            status.HTTP_400_BAD_REQUEST,
+            ['Error occured when creating swot']
+        )
 
-    return Response({
-        'data': {
-            'swotId': swot.id,
-            'creatorId': swot.created_by_id,
-            'title': swot.title,
-            'description': swot.description,
-        }
-    }, status=status.HTTP_201_CREATED)
+    return (
+        swot,
+        status.HTTP_201_CREATED,
+        None,
+    )
 
 
 @api_view(['PUT', 'DELETE'])
 @authenticate
 @deserialize
+@serialize
 def swot_detail(request, swot_id):
     swot_id = int(swot_id)
     swot = None
@@ -61,31 +82,38 @@ def swot_detail(request, swot_id):
     try:
         swot = Swot.objects.get(id=swot_id)
     except ObjectDoesNotExist:
-        return Response(
-            {'errors': ['Swot id={} does not exist']},
-            status=status.HTTP_404_NOT_FOUND
+        return (
+            None,
+            status.HTTP_404_NOT_FOUND,
+            ['Swot id={} does not exist'],
         )
 
     user_id = request.user.id
     creator_id = swot.created_by_id
 
     if user_id != creator_id:
-        return Response({
-            'errors': ['Only creator can delete swot']
-        }, status=status.HTTP_403_FORBIDDEN)
+        return (
+            None,
+            status.HTTP_403_FORBIDDEN,
+            ['Only creator can delete swot']
+        )
 
     if request.method == 'DELETE':
         try:
             swot.delete()
         except:
-            return Response({
-                'errors': ['Error occurred when deleting swot {}'.format(swot_id)],
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return (
+                None,
+                status.HTTP_400_BAD_REQUEST,
+                ['Error occurred when deleting swot {}'.format(swot_id)]
+            )
 
-        return Response(
-            {'data': {}},
-            status=status.HTTP_204_NO_CONTENT
+        return (
+            None,
+            status.HTTP_204_NO_CONTENT,
+            None,
         )
+
     else:
         data = request.body
         if 'title' in data:
@@ -96,16 +124,14 @@ def swot_detail(request, swot_id):
         try:
             swot.save()
         except:
-            return Response({
-                'errors': ['Error occurred when updating Swot {}'.format(swot_id)],
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return (
+                None,
+                status.HTTP_400_BAD_REQUEST
+                ['Error occurred when updating Swot {}'.format(swot_id)]
+            )
 
-        return Response({
-            'data': {
-                'swotId': swot.id,
-                'creatorId': swot.created_by_id,
-                'title': swot.title,
-                'description': swot.description,
-            }
-        }, status=status.HTTP_200_OK)
-
+        return (
+            swot,
+            status.HTTP_200_OK,
+            None,
+        )
