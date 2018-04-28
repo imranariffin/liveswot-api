@@ -1,37 +1,13 @@
 from django.core.exceptions import ObjectDoesNotExist
 
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 
 from swot.models import Swot
+from swot.serializers import serialize
 
 from core.decorators import authenticate
 from core.serializers import deserialize
-
-
-def serialize(func):
-    def _serialize(request, *args, **kwargs):
-        data, status, errors = func(request, *args, **kwargs)
-
-        if type(data) == list:
-            return Response({
-                'data': [{
-                    'swotId': swot.id,
-                    'creatorId': swot.created_by_id,
-                    'title': swot.title,
-                    'description': swot.description,
-            } for swot in data]}, status=status)
-
-        swot = data
-        return Response({
-            'data': {
-                'swotId': swot.id,
-                'creatorId': swot.created_by_id,
-                'title': swot.title,
-                'description': swot.description,
-        }}, status=status)
-    return _serialize
 
 
 @api_view(['GET', 'POST'])
