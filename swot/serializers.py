@@ -1,9 +1,34 @@
-from rest_framework import serializers
-
-from swot.models import Swot
+from rest_framework.response import Response
 
 
-class SwotSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Swot
-        fields = ('id', 'title', 'description', 'created_by_id',)
+def serialize(func):
+
+    def serialize_swot(swot):
+        if swot is None:
+            return {}
+        return {
+            'swotId': swot.id,
+            'creatorId': swot.created_by_id,
+            'title': swot.title,
+            'description': swot.description,
+        }
+
+    def _serialize(request, *args, **kwargs):
+        data, status, errors = func(request, *args, **kwargs)
+
+        if errors:
+            return Response({
+                'errors': errors
+            }, status=status)
+
+        if type(data) == list:
+            return Response({
+                'data': [
+                    serialize_swot(swot) for swot in data
+                ]}, status=status)
+
+        swot = data
+        return Response({
+            'data': serialize_swot(swot)
+        }, status=status)
+    return _serialize
