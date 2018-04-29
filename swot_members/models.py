@@ -13,7 +13,13 @@ class Manager(models.Manager):
         ])
 
         if added_by_id not in member_ids:
-            raise IntegrityError('Only swot creator can add member')
+            raise IntegrityError('Only swot member can add member')
+
+        try:
+            self.get(swot_id=swot_id, member_id=member_id)
+            raise IntegrityError('(`swot_id` and `member_id`) must be unique')
+        except SwotMember.DoesNotExist:
+            pass
 
         return SwotMember(
             member_id=member_id,
@@ -23,9 +29,6 @@ class Manager(models.Manager):
 
 
 class SwotMember(models.Model):
-    class Meta:
-        unique_together = (('swot', 'member'),)
-
     objects = Manager()
 
     created = models.DateTimeField(auto_now_add=True)

@@ -35,7 +35,7 @@ class ShapeVoteTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_successful_get_should_respond_with_correct_response_shape(self):
         response = client.get(
@@ -108,7 +108,7 @@ class PostVoteTestCase(TestCase):
     no_vote_item_id = 9
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
         delete_votes_in_item(self.no_vote_item_id)
 
     def test_successful_post_should_respond_with_correct_response_shape(self):
@@ -218,7 +218,7 @@ class ErrorVotesTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_vote_non_existing_item_should_repond_404(self):
         response = client.post(
@@ -245,7 +245,7 @@ class MultipleVotesTestCase(TestCase):
         }
         self.vote_down = {'voteType': 'down', }
 
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_vote_up_twice_should_neutralize(self):
         swot_id = 1
@@ -353,7 +353,7 @@ class MultipleUsersVotesTestCase(TestCase):
         # item with no vote
         item_id = self.no_vote_item_id
 
-        testutils.setuptoken(self, self.auth_data1, client)
+        testutils.setup_token(self, self.auth_data1, client)
         response_data = client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
             data=json.dumps(self.vote_down),
@@ -361,7 +361,7 @@ class MultipleUsersVotesTestCase(TestCase):
         ).data['data']
         self.assertNotEqual(response_data, {})
 
-        testutils.setuptoken(self, self.auth_data2, client)
+        testutils.setup_token(self, self.auth_data2, client)
         response_data = client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
             data=json.dumps(self.vote_down),
@@ -388,14 +388,14 @@ class MultipleUsersVotesTestCase(TestCase):
             (v['creatorId'], v['swotItemId']) for v in response_data
         ])
 
-        testutils.setuptoken(self, self.auth_data1, client)
+        testutils.setup_token(self, self.auth_data1, client)
         client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
             data=json.dumps(self.vote_down),
             content_type='application/json',
         ).data['data']
 
-        testutils.setuptoken(self, self.auth_data2, client)
+        testutils.setup_token(self, self.auth_data2, client)
         client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': item_id}),
             data=json.dumps(self.vote_down),

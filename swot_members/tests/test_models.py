@@ -35,7 +35,7 @@ class TestModel(TestCase):
 
     def test_member_and_swot_must_be_unique(self):
         try:
-            SwotMember.objects.create(
+            swot_member = SwotMember.objects.create(
                 added_by_id=5,
                 member_id=2,
                 swot_id=8,

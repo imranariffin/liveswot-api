@@ -32,6 +32,10 @@ urlpatterns = [
         r'^api/swots/',
         include('swot.urls', namespace='swot')
     ),
+    url(
+        r'^api/members/',
+        include('swot_members.urls', namespace='swot_members')
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

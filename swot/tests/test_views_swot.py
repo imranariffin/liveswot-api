@@ -21,7 +21,7 @@ class SimpleGetSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_successful_get_swots_should_respond_with_correct_shape(self):
         response = client.get(
@@ -70,7 +70,7 @@ class SimplePostSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_successful_post_swot_should_respond_with_correct_shape(self):
         response = client.post(
@@ -123,7 +123,7 @@ class SimplePutSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_successful_put_swot_should_respond_with_correct_shape(self):
         response = client.put(
@@ -172,7 +172,7 @@ class SimpleDeleteSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_successful_put_swot_should_respond_with_correct_shape(self):
         response = client.delete(
@@ -196,7 +196,7 @@ class GetSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_get_all_swots(self):
         response = client.get(
@@ -243,7 +243,7 @@ class PostSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_post_should_create_new_swot(self):
         n = len(client.get(
@@ -275,7 +275,7 @@ class DeleteSwotTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_successful_delete_should_remove_swot_from_db(self):
 

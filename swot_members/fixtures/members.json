@@ -28,5 +28,15 @@
       "member_id": 4,
       "swot_id": 9
     }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 5,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 5,
+      "swot_id": 8
+    }
   }
 ]
