@@ -7,43 +7,36 @@ from swot_item.models import SwotItem, CARD_TYPES
 import json
 
 
-class SwotItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SwotItem
-        fields = ('id', 'cardType', 'text')
+def serialize(func):
+    def serialize_swot_item(swot_item):
+        if swot_item is None:
+            return {}
+        return {
+            'swotItemId': swot_item.id,
+            'swotId': swot_item.swot_id,
+            'creatorId': swot_item.created_by_id,
+            'text': swot_item.text,
+            'cardType': swot_item.cardType,
+            'score': swot_item.score,
+        }
 
+    def _serialize(request, *args, **kwargs):
+        data, status, errors = func(request, *args, **kwargs)
 
-def serialize_request(func):
-    def wrap(request, *args, **kwargs):
+        if errors:
+            return Response({
+                'errors': errors,
+            }, status=status)
 
-        if request.method == 'POST':
-            try:
-                request.body = json.loads(request.body)
-            except:
-                return Response(
-                    {'errors': ['Error during serialization']},
-                    status=status.HTTP_400_BAD_REQUEST)
+        if type(data) == list:
+            return Response({
+                'data': [
+                    serialize_swot_item(swot_item) for swot_item in data
+                ]}, status=status)
 
-            required = ('text', 'cardType')
-            errors = []
-            for arg in required:
-                if arg not in request.body:
-                    errors.append('required: {}'.format(arg))
-                    continue
-                if request.body[arg] == '':
-                    errors.append('`{}` field cannot be empty')
-                    continue
-                if arg == 'cardType' and request.body[arg] not in CARD_TYPES:
-                    card_type = request.body[arg]
-                    errors.append('`{}` is not a valid cardType option'.format(card_type))
-            if errors:
-                return Response(
-                    {'errors': errors},
-                    status=status.HTTP_400_BAD_REQUEST)
+        swot_item = data
+        return Response({
+            'data': serialize_swot_item(swot_item)
+        }, status=status)
 
-        return func(request, *args, **kwargs)
-
-    wrap.__doc__ = func.__doc__
-    wrap.__name__ = func.__name__
-
-    return wrap
+    return _serialize
