@@ -10,37 +10,9 @@ from core.decorators import authenticate
 from swot.models import Swot
 
 from .models import SwotMember
+from .serializers import serialize
 
 from authenticationjwt.models import User
-
-
-def serialize(func):
-
-    def serialize_member(data):
-        if data is None:
-            return {}
-
-        return {
-            'membershipId': data.id,
-            'memberId': data.member_id,
-            'swotId': data.swot_id,
-            'addedById': data.added_by_id,
-            'created': data.created
-        }
-
-    def _serialize(request, *args, **kwargs):
-        data, status, errors = func(request, *args, **kwargs)
-
-        if errors:
-            return Response({
-                'errors': errors
-            }, status=status)
-
-        return Response({
-            'data': serialize_member(data),
-        }, status=status)
-
-    return _serialize
 
 
 @api_view(['POST'])
@@ -89,3 +61,4 @@ def get_add_members(request, swot_id, member_id):
         return None, status.HTTP_400_BAD_REQUEST, ie.message
 
     return swot_member, status.HTTP_201_CREATED, None
+
