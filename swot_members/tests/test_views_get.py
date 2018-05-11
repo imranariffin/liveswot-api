@@ -9,7 +9,7 @@ from utils.testutils import setup_token
 client = APIClient()
 
 
-class TestViewsPost(TestCase):
+class TestViewsGet(TestCase):
     fixtures = ['members.json', 'swots.json', 'users.json']
     auth_data = {
         'user': {
@@ -50,3 +50,16 @@ class TestViewsPost(TestCase):
         self.assertTrue(all(['swotId' in d for d in response_data]))
         self.assertTrue(all(['addedById' in d for d in response_data]))
         self.assertTrue(all(['created' in d for d in response_data]))
+
+    def test_success_respond_with_correct_data_types(self):
+        response_data = client.get(
+            reverse('swot_members:get', kwargs={
+                'swot_id': 8,
+            }),
+            content_type='application/json'
+        ).data['data']
+
+        self.assertTrue(all([type(d['memberId']) == int for d in response_data]))
+        self.assertTrue(all([type(d['membershipId']) == int for d in response_data]))
+        self.assertTrue(all([type(d['swotId']) == int for d in response_data]))
+        self.assertTrue(all([type(d['addedById']) == int for d in response_data]))

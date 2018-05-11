@@ -19,7 +19,9 @@ from authenticationjwt.models import User
 @deserialize
 @serialize
 def add_members(request, swot_id, member_id):
-    user_id = request.user.id
+    user_id = int(request.user.id)
+    swot_id = int(swot_id)
+    member_id = int(member_id)
     swot = None
 
     try:
@@ -67,7 +69,8 @@ def add_members(request, swot_id, member_id):
 @deserialize
 @serialize
 def get_members(request, swot_id):
-    user_id = request.user.id
+    user_id = int(request.user.id)
+    swot_id = int(swot_id)
 
     try:
         Swot.objects.get(id=swot_id)

@@ -8,6 +8,7 @@ from swot.serializers import serialize
 
 from core.decorators import authenticate
 from core.serializers import deserialize
+from swot_members.models import SwotMember
 
 
 @api_view(['GET', 'POST'])
@@ -39,6 +40,13 @@ def swot_list(request):
             status.HTTP_400_BAD_REQUEST,
             ['Error occured when creating swot']
         )
+
+    # creator automatically becomes member of swot
+    SwotMember.objects.create(
+        member_id=user_id,
+        swot_id=swot.id,
+        added_by_id=user_id,
+    ).save()
 
     return (
         swot,

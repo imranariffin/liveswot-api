@@ -54,3 +54,18 @@ class TestViewsPost(TestCase):
         self.assertTrue('membershipId' in response_data)
         self.assertTrue('created' in response_data)
         self.assertTrue('addedById' in response_data)
+
+    def test_success_respond_with_correct_data_types(self):
+        response_data = client.post(
+            reverse('swot_members:post', kwargs={
+                'swot_id': 8,
+                'member_id': 6,
+            }),
+            content_type='application/json',
+            data=json.dumps({})
+        ).data['data']
+
+        self.assertTrue(type(response_data['memberId']) == int)
+        self.assertTrue(type(response_data['membershipId']) == int)
+        self.assertTrue(type(response_data['swotId']) == int)
+        self.assertTrue(type(response_data['addedById']) == int)

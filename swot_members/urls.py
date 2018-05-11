@@ -9,7 +9,7 @@ urlpatterns = [
         name='post',
     ),
     url(
-        r'/swots/(?P<swot_id>[0-9]+)/$',
+        r'swots/(?P<swot_id>[0-9]+)/$',
         views.get_members,
         name='get',
     )

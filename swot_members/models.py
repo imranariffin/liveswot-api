@@ -12,7 +12,7 @@ class Manager(models.Manager):
             m.member_id for m in SwotMember.objects.filter(swot_id=swot_id)
         ])
 
-        if added_by_id not in member_ids:
+        if len(member_ids) > 0 and added_by_id not in member_ids:
             raise IntegrityError('Only swot member can add member')
 
         try:
@@ -21,11 +21,14 @@ class Manager(models.Manager):
         except SwotMember.DoesNotExist:
             pass
 
-        return SwotMember(
+        ret = SwotMember(
             member_id=member_id,
             swot_id=swot_id,
             added_by_id=added_by_id
         )
+        ret.save()
+
+        return ret
 
 
 class SwotMember(models.Model):
