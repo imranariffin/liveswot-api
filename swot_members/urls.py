@@ -6,6 +6,6 @@ urlpatterns = [
     url(
         r'(?P<member_id>[0-9]+)/swots/(?P<swot_id>[0-9]+)/$',
         views.get_add_members,
-        name='get_post'
+        name='post'
     ),
 ]

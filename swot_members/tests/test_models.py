@@ -1,11 +1,7 @@
 from django.test import TestCase
 from django.db import IntegrityError
 
-from swot.models import Swot
-
 from ..models import SwotMember
-
-from authenticationjwt.models import User
 
 
 class TestModel(TestCase):

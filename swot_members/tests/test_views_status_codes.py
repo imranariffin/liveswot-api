@@ -7,26 +7,6 @@ from rest_framework import status
 
 from utils.testutils import setup_token
 
-# # -*- coding: utf-8 -*-
-# from __future__ import unicode_literals
-#
-# from django.test import TestCase
-#
-# # API
-#
-# '''
-# /swots/:id/members
-# '''
-# # POST creator can add members
-# # PUT creator can update swot
-# # DELETE creator can remove members
-# # GET members and creator can get swots
-#
-# '''
-# Other
-# '''
-# # members can add swot item
-# # PUT members can update swot item
 
 client = APIClient()
 
@@ -46,7 +26,7 @@ class TestAddMemberStatusCode(TestCase):
 
     def test_creator_add_member_success_should_respond_201(self):
         response = client.post(
-            reverse('swot_members:get_post', kwargs={
+            reverse('swot_members:post', kwargs={
                 'swot_id': 8,
                 'member_id': 6,
             }),
@@ -58,7 +38,7 @@ class TestAddMemberStatusCode(TestCase):
 
     def test_non_creator_directly_add_member_should_return_403(self):
         response = client.post(
-            reverse('swot_members:get_post', kwargs={
+            reverse('swot_members:post', kwargs={
                 'swot_id': 4,
                 'member_id': 6,
             }),
@@ -70,7 +50,7 @@ class TestAddMemberStatusCode(TestCase):
 
     def test_add_member_to_non_existing_swot_should_return_404(self):
         response = client.post(
-            reverse('swot_members:get_post', kwargs={
+            reverse('swot_members:post', kwargs={
                 'swot_id': 99,
                 'member_id': 6,
             }),
@@ -82,7 +62,7 @@ class TestAddMemberStatusCode(TestCase):
 
     def test_add_non_existing_user_to_swot_should_return_404(self):
         response = client.post(
-            reverse('swot_members:get_post', kwargs={
+            reverse('swot_members:post', kwargs={
                 'swot_id': 4,
                 'member_id': 999,
             }),

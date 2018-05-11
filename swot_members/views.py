@@ -24,6 +24,7 @@ def serialize(func):
             'membershipId': data.id,
             'memberId': data.member_id,
             'swotId': data.swot_id,
+            'addedById': data.added_by_id,
             'created': data.created
         }
 
@@ -42,7 +43,7 @@ def serialize(func):
     return _serialize
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 @authenticate
 @deserialize
 @serialize
@@ -53,31 +54,33 @@ def get_add_members(request, swot_id, member_id):
     try:
         User.objects.get(id=member_id)
     except User.DoesNotExist:
+        err_msg = 'Cannot add non-existing user `{}` to swot `{}`'
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            ['User does not exist']
+            [err_msg.format(member_id, swot_id)]
         )
 
     try:
         swot = Swot.objects.get(id=swot_id)
     except Swot.DoesNotExist:
+        err_msg = 'Cannot add user `{}` to non-existing swot `{}`'
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            ['Swot does not exist']
+            [err_msg.format(member_id, swot_id)]
         )
 
     if swot.created_by_id != user_id:
         return (
             None,
             status.HTTP_403_FORBIDDEN,
-            ['']
+            ['Not allowed']
         )
 
     swot_member = None
     try:
-        SwotMember.objects.create(
+        swot_member = SwotMember.objects.create(
             added_by_id=user_id,
             member_id=member_id,
             swot_id=swot_id
