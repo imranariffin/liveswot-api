@@ -2,7 +2,6 @@ from django.db import IntegrityError
 
 from rest_framework.decorators import api_view
 from rest_framework import status
-from rest_framework.response import Response
 
 from core.serializers import deserialize
 from core.decorators import authenticate
@@ -19,7 +18,7 @@ from authenticationjwt.models import User
 @authenticate
 @deserialize
 @serialize
-def get_add_members(request, swot_id, member_id):
+def add_members(request, swot_id, member_id):
     user_id = request.user.id
     swot = None
 
@@ -58,7 +57,30 @@ def get_add_members(request, swot_id, member_id):
             swot_id=swot_id
         )
     except IntegrityError, ie:
-        return None, status.HTTP_400_BAD_REQUEST, ie.message
+        return None, status.HTTP_400_BAD_REQUEST, [ie.message]
 
     return swot_member, status.HTTP_201_CREATED, None
 
+
+@api_view(['GET'])
+@authenticate
+@deserialize
+@serialize
+def get_members(request, swot_id):
+    user_id = request.user.id
+
+    try:
+        Swot.objects.get(id=swot_id)
+    except Swot.DoesNotExist, sdne:
+        return None, status.HTTP_404_NOT_FOUND, [sdne.message]
+
+    members = [member for member in SwotMember.objects.filter(swot_id=swot_id)]
+
+    if user_id not in set([m.member_id for m in members]):
+        return None, status.HTTP_403_FORBIDDEN, ['Not a member']
+
+    return (
+        members,
+        status.HTTP_200_OK,
+        None
+    )

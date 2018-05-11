@@ -71,3 +71,37 @@ class TestAddMemberStatusCode(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class TestGetMembersStatusCode(TestCase):
+    fixtures = ['members.json', 'swots.json', 'users.json']
+    auth_data = {
+        'user': {
+            'userId': 5,
+            'email': 'imran.ariffin@liveswot.com',
+            'password': 'katakunci'
+        }
+    }
+
+    def setUp(self):
+        setup_token(self, self.auth_data, client)
+
+    def test_get_members_from_non_existing_swot_should_return_404(self):
+        response = client.get(
+            reverse('swot_members:get', kwargs={
+                'swot_id': 99,
+            }),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_get_members_from_non_member_of_swot_should_return_403(self):
+        response = client.get(
+            reverse('swot_members:get', kwargs={
+                'swot_id': 9,
+            }),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
