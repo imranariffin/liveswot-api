@@ -105,3 +105,22 @@ class TestGetMembersStatusCode(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_get_members_without_token_should_return_403(self):
+        response = APIClient().get(
+            reverse('swot_members:get', kwargs={
+                'swot_id': 8,
+            }),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        response = APIClient().get(
+            reverse('swot_members:get', kwargs={
+                'swot_id': 99,
+            }),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
