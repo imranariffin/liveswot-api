@@ -18,10 +18,11 @@ from swot_members.models import SwotMember
 def swot_list(request):
     if request.method == 'GET':
         user = request.user
-        swots = Swot.objects.filter(created_by_id=user.id)
+        memberships = SwotMember.objects.filter(member_id=user.id)
+        # swots = Swot.objects.filter(created_by_id=user.id)
 
         return (
-            [swot for swot in swots],
+            [Swot.objects.get(pk=m.swot_id) for m in memberships],
             status.HTTP_200_OK,
             None
         )
