@@ -61,6 +61,7 @@ def swot_list(request):
 @deserialize
 @serialize
 def swot_detail(request, swot_id):
+    user_id = request.user.id
     swot_id = int(swot_id)
     swot = None
 
@@ -73,14 +74,13 @@ def swot_detail(request, swot_id):
             ['Swot id={} does not exist'],
         )
 
-    user_id = request.user.id
     creator_id = swot.created_by_id
 
     if user_id != creator_id:
         return (
             None,
             status.HTTP_403_FORBIDDEN,
-            ['Only creator can delete swot']
+            ['Only creator can delete/modify swot']
         )
 
     if request.method == 'DELETE':

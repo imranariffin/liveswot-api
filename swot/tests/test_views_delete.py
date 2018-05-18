@@ -9,10 +9,10 @@ client = APIClient()
 
 
 class SimpleDeleteSwotTestCase(TestCase):
-    fixtures = ['users.json', 'swots.json']
+    fixtures = ['users.json', 'swots.json', 'members.json']
     auth_data = {
         'user': {
-            'id': 100,
+            'id': 5,
             'email': 'imran.ariffin@liveswot.com',
             'password': 'katakunci'
         }
@@ -23,7 +23,7 @@ class SimpleDeleteSwotTestCase(TestCase):
 
     def test_successful_put_swot_should_respond_with_correct_shape(self):
         response = client.delete(
-            reverse('swot:put_delete', args=[1]),
+            reverse('swot:put_delete', args=[3]),
             content_type='application/json',
         )
 
@@ -71,7 +71,7 @@ class DeleteSwotTestCase(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(len(response.data['errors']), 1)
-        self.assertEqual(response.data['errors'][0], 'Only creator can delete swot')
+        self.assertEqual(response.data['errors'][0], 'Only creator can delete/modify swot')
 
     def test_respond_403_for_non_authenticated_request(self):
         client.credentials(HTTP_AUTHORIZATION='')
