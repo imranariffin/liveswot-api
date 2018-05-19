@@ -3,7 +3,7 @@ import json
 from django.urls import reverse
 
 
-def setuptoken(self, auth_data, client):
+def setup_token(self, auth_data, client):
 
     gettoken_response = client.post(
         reverse('authenticationjwt:login'),

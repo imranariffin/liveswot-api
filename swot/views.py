@@ -8,6 +8,7 @@ from swot.serializers import serialize
 
 from core.decorators import authenticate
 from core.serializers import deserialize
+from swot_members.models import SwotMember
 
 
 @api_view(['GET', 'POST'])
@@ -17,10 +18,11 @@ from core.serializers import deserialize
 def swot_list(request):
     if request.method == 'GET':
         user = request.user
-        swots = Swot.objects.filter(created_by_id=user.id)
+        memberships = SwotMember.objects.filter(member_id=user.id)
+        # swots = Swot.objects.filter(created_by_id=user.id)
 
         return (
-            [swot for swot in swots],
+            [Swot.objects.get(pk=m.swot_id) for m in memberships],
             status.HTTP_200_OK,
             None
         )
@@ -40,6 +42,13 @@ def swot_list(request):
             ['Error occured when creating swot']
         )
 
+    # creator automatically becomes member of swot
+    SwotMember.objects.create(
+        member_id=user_id,
+        swot_id=swot.id,
+        added_by_id=user_id,
+    ).save()
+
     return (
         swot,
         status.HTTP_201_CREATED,
@@ -52,6 +61,7 @@ def swot_list(request):
 @deserialize
 @serialize
 def swot_detail(request, swot_id):
+    user_id = request.user.id
     swot_id = int(swot_id)
     swot = None
 
@@ -64,14 +74,13 @@ def swot_detail(request, swot_id):
             ['Swot id={} does not exist'],
         )
 
-    user_id = request.user.id
     creator_id = swot.created_by_id
 
     if user_id != creator_id:
         return (
             None,
             status.HTTP_403_FORBIDDEN,
-            ['Only creator can delete swot']
+            ['Only creator can delete/modify swot']
         )
 
     if request.method == 'DELETE':

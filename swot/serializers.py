@@ -7,6 +7,7 @@ def serialize(func):
         if swot is None:
             return {}
         return {
+            'createdAt': unicode(swot.created),
             'swotId': swot.id,
             'creatorId': swot.created_by_id,
             'title': swot.title,

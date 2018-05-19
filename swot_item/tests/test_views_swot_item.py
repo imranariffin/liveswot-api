@@ -29,7 +29,7 @@ class ShapeSwotItemTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_success_get_all_items_returns_correct_shape(self):
         response = client.get(reverse('get_post_swot_item', kwargs={'swot_id': 1}))
@@ -170,7 +170,7 @@ class GetSwotItemTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_success_get_all_items_returns_200(self):
         response = client.get(reverse('get_post_swot_item', kwargs={'swot_id': 1}))
@@ -213,7 +213,7 @@ class PostSwotItemTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_create_a_valid_strength_item(self):
         response = client.post(
@@ -263,7 +263,7 @@ class DeleteSwotItemTestCase(TestCase):
 
     def setUp(self):
 
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
         client.post(
             reverse('swot_item_vote:post', kwargs={'swot_item_id': 1}),
             data=json.dumps(self.vote_up),
@@ -318,7 +318,7 @@ class PutSwotItemTestCase(TestCase):
     }
 
     def setUp(self):
-        testutils.setuptoken(self, self.auth_data, client)
+        testutils.setup_token(self, self.auth_data, client)
 
     def test_put_success_should_return_200(self):
         response = client.put(

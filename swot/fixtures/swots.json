@@ -68,5 +68,25 @@
       "description": "Swot with one item only sob sob",
       "created_by_id": 5
     }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 8,
+    "fields": {
+      "created": "2018-09-04",
+      "title": "Swot with many members",
+      "description": "Swot with many members",
+      "created_by_id": 5
+    }
+  },
+  {
+    "model": "swot.Swot",
+    "pk": 9,
+    "fields": {
+      "created": "2018-09-04",
+      "title": "Swot with only creator as member",
+      "description": "Swot with only creator as member",
+      "created_by_id": 4
+    }
   }
 ]

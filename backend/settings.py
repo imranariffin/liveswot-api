@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'swot_item_vote.apps.SwotItemVoteConfig',
     'rest_framework',
     'authenticationjwt.apps.AuthenticationjwtConfig',
+    'swot_members.apps.SwotMembersConfig',
 ]
 
 SITE_ID = 1

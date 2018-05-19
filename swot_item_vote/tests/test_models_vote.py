@@ -7,7 +7,7 @@ from swot_item_vote.models import Vote
 from authenticationjwt.models import User
 
 
-class VoteModelTestCase(TestCase):
+class TestVoteModel(TestCase):
     fixtures = ['users.json', 'swots.json', 'swotItems.json', 'votes.json']
     user, swot, swot_item, vote = None, None, None, None
 

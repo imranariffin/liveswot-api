@@ -1,0 +1,82 @@
+[
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 1,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 2,
+      "swot_id": 8
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 2,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 3,
+      "swot_id": 8
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 4,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 4,
+      "member_id": 4,
+      "swot_id": 9
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 5,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 5,
+      "swot_id": 8
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 6,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 5,
+      "swot_id": 2
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 7,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 5,
+      "swot_id": 3
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 8,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 2,
+      "member_id": 2,
+      "swot_id": 4
+    }
+  },
+  {
+    "model": "swot_members.SwotMember",
+    "pk": 9,
+    "fields": {
+      "created": "2018-09-04",
+      "added_by_id": 5,
+      "member_id": 5,
+      "swot_id": 5
+    }
+  }
+]
