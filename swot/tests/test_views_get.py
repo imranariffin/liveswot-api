@@ -9,7 +9,7 @@ client = APIClient()
 
 
 class SimpleGetSwotTestCase(TestCase):
-    fixtures = ['users.json', 'swots.json']
+    fixtures = ['users.json', 'swots.json', 'members.json']
     auth_data = {
         'user': {
             'id': 5,
@@ -30,6 +30,7 @@ class SimpleGetSwotTestCase(TestCase):
         self.assertEqual(type(response.data), dict)
 
         response_data = response.data['data']
+        self.assertTrue(len(response_data) > 0)
         self.assertEqual(type(response_data), list)
 
     def test_successful_get_swots_should_respond_with_correct_information(self):
@@ -37,20 +38,24 @@ class SimpleGetSwotTestCase(TestCase):
             reverse('swot:get_post', kwargs={}),
         ).data['data']
 
+        self.assertTrue(len(response_data) > 0)
         self.assertTrue(all(['swotId' in swot for swot in response_data]))
         self.assertTrue(all(['creatorId' in swot for swot in response_data]))
         self.assertTrue(all(['title' in swot for swot in response_data]))
         self.assertTrue(all(['description' in swot for swot in response_data]))
+        self.assertTrue(all(['createdAt' in swot for swot in response_data]))
 
     def test_successful_get_swots_should_respond_with_correct_types(self):
         res_data = client.get(
             reverse('swot:get_post', kwargs={}),
         ).data['data']
 
+        self.assertTrue(len(res_data) > 0)
         self.assertTrue(all([type(swot['swotId']) == int for swot in res_data]))
         self.assertTrue(all([type(swot['creatorId']) == int for swot in res_data]))
         self.assertTrue(all([type(swot['title']) == unicode for swot in res_data]))
         self.assertTrue(all([type(swot['description']) == unicode for swot in res_data]))
+        self.assertTrue(all([type(swot['createdAt']) == unicode for swot in res_data]))
 
 
 class GetSwotTestCase(TestCase):
