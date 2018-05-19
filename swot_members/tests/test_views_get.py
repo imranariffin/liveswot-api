@@ -50,6 +50,7 @@ class TestViewsGet(TestCase):
         self.assertTrue(all(['swotId' in d for d in response_data]))
         self.assertTrue(all(['addedById' in d for d in response_data]))
         self.assertTrue(all(['created' in d for d in response_data]))
+        self.assertTrue(all(['userName' in d for d in response_data]))
 
     def test_success_respond_with_correct_data_types(self):
         response_data = client.get(
@@ -63,3 +64,4 @@ class TestViewsGet(TestCase):
         self.assertTrue(all([type(d['membershipId']) == int for d in response_data]))
         self.assertTrue(all([type(d['swotId']) == int for d in response_data]))
         self.assertTrue(all([type(d['addedById']) == int for d in response_data]))
+        self.assertTrue(all([type(d['userName']) == unicode for d in response_data]))

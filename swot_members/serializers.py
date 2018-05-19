@@ -1,4 +1,5 @@
 from rest_framework.response import Response
+from authenticationjwt.models import User
 
 
 def serialize(func):
@@ -8,6 +9,7 @@ def serialize(func):
             return {}
 
         return {
+            'userName': User.objects.get(pk=data.member_id).username,
             'membershipId': data.id,
             'memberId': data.member_id,
             'swotId': data.swot_id,
