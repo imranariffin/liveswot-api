@@ -12,7 +12,7 @@ class SimpleGetSwotTestCase(TestCase):
     fixtures = ['users.json', 'swots.json']
     auth_data = {
         'user': {
-            'id': 100,
+            'id': 5,
             'email': 'imran.ariffin@liveswot.com',
             'password': 'katakunci'
         }
@@ -75,6 +75,10 @@ class GetSwotTestCase(TestCase):
         self.assertEqual(type(response.data), dict)
         self.assertEqual(type(response.data['data']), list)
         self.assertTrue(len(response.data['data']) > 0)
+        self.assertEqual(
+            set([2, 3, 5, 8]),
+            set([sw['swotId'] for sw in response.data['data']]),
+        )
 
     def test_get_swots_without_token_should_error(self):
         client.credentials(HTTP_AUTHORIZATION='')
