@@ -26,7 +26,7 @@ class TestViewsPost(TestCase):
         response_data = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             data=json.dumps({}),
             content_type='application/json'
@@ -39,7 +39,7 @@ class TestViewsPost(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             content_type='application/json',
             data=json.dumps({})
@@ -59,7 +59,7 @@ class TestViewsPost(TestCase):
         response_data = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             content_type='application/json',
             data=json.dumps({})
