@@ -28,7 +28,7 @@ class TestAddMemberStatusCode(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             data=json.dumps({}),
             content_type='application/json',
@@ -40,7 +40,7 @@ class TestAddMemberStatusCode(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 4,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             data=json.dumps({}),
             content_type='application/json',
@@ -52,7 +52,7 @@ class TestAddMemberStatusCode(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 99,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             data=json.dumps({}),
             content_type='application/json',
@@ -64,7 +64,7 @@ class TestAddMemberStatusCode(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 4,
-                'member_id': 999,
+                'username': 'nonexistinguser',
             }),
             data=json.dumps({}),
             content_type='application/json',

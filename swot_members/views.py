@@ -18,20 +18,20 @@ from authenticationjwt.models import User
 @authenticate
 @deserialize
 @serialize
-def add_members(request, swot_id, member_id):
+def add_members(request, swot_id, username):
     user_id = int(request.user.id)
     swot_id = int(swot_id)
-    member_id = int(member_id)
     swot = None
+    user_to_add = None
 
     try:
-        User.objects.get(id=member_id)
+        user_to_add = User.objects.get(username=username)
     except User.DoesNotExist:
         err_msg = 'Cannot add non-existing user `{}` to swot `{}`'
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            [err_msg.format(member_id, swot_id)]
+            [err_msg.format(username, swot_id)]
         )
 
     try:
@@ -41,7 +41,7 @@ def add_members(request, swot_id, member_id):
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            [err_msg.format(member_id, swot_id)]
+            [err_msg.format(username, swot_id)]
         )
 
     if swot.created_by_id != user_id:
@@ -55,7 +55,7 @@ def add_members(request, swot_id, member_id):
     try:
         swot_member = SwotMember.objects.create(
             added_by_id=user_id,
-            member_id=member_id,
+            member_id=user_to_add.id,
             swot_id=swot_id
         )
     except IntegrityError, ie:

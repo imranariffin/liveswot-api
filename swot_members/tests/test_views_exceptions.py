@@ -27,7 +27,7 @@ class TestViewsExceptions(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 4,
-                'member_id': 6,
+                'username': 'testuser4',
             }),
             data=json.dumps({}),
             content_type='application/json',
@@ -39,11 +39,11 @@ class TestViewsExceptions(TestCase):
         )
 
     def test_cannot_add_non_existing_member(self):
-        swot_id, member_id = 4, 999
+        swot_id, username = 4, 'nonexistinguser'
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': swot_id,
-                'member_id': member_id,
+                'username': username,
             }),
             data=json.dumps({}),
             content_type='application/json',
@@ -51,15 +51,15 @@ class TestViewsExceptions(TestCase):
 
         self.assertEqual(
             response.data['errors'],
-            ['Cannot add non-existing user `{}` to swot `{}`'.format(member_id, swot_id)]
+            ['Cannot add non-existing user `{}` to swot `{}`'.format(username, swot_id)]
         )
 
     def test_cannot_add_member_to_non_existing_swot(self):
-        swot_id, member_id = 999, 6
+        swot_id, username = 999, 'testuser4'
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': swot_id,
-                'member_id': member_id,
+                'username': username,
             }),
             data=json.dumps({}),
             content_type='application/json',
@@ -67,5 +67,5 @@ class TestViewsExceptions(TestCase):
 
         self.assertEqual(
             response.data['errors'],
-            ['Cannot add user `{}` to non-existing swot `{}`'.format(member_id, swot_id)]
+            ['Cannot add user `{}` to non-existing swot `{}`'.format(username, swot_id)]
         )
