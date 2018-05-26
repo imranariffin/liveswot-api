@@ -55,7 +55,7 @@ class TestMember(TestCase):
 class TestInvites(TestCase):
     fixtures = ['invites.json', 'members.json', 'users.json', 'swots.json']
 
-    def test_member_cannot_be_null(self):
+    def test_email_cannot_be_null(self):
         try:
             Invite.objects.create(
                 added_by_id=5,
@@ -68,7 +68,7 @@ class TestInvites(TestCase):
     def test_swot_cannot_be_null(self):
         try:
             Invite.objects.create(
-                member_id=20,
+                email="imran.ariffin3@liveswot.com",
                 added_by_id=5
             )
             self.fail()
@@ -78,7 +78,7 @@ class TestInvites(TestCase):
     def test_added_by_must_be_swot_member(self):
         try:
             Invite.objects.create(
-                member_id=20,
+                email="imran.ariffin3@liveswot.com",
                 added_by_id=4,
                 swot_id=8
             )
@@ -91,12 +91,12 @@ class TestInvites(TestCase):
     def test_create_invite_returns_new_invite_object(self):
         try:
             invite = Invite.objects.create(
-                member_id=20,
+                email="imran.ariffin3@liveswot.com",
                 added_by_id=5,
                 swot_id=8
             )
             self.assertIsNotNone(invite)
-            self.assertEqual(invite.member_id, 20)
+            self.assertEqual(invite.email, "imran.ariffin3@liveswot.com")
             self.assertEqual(invite.added_by_id, 5)
             self.assertEqual(invite.swot_id, 8)
             self.assertIsNotNone(invite.created)

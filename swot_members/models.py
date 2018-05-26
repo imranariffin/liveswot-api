@@ -67,7 +67,7 @@ class SwotMember(models.Model):
 
 
 class InviteManager(models.Manager):
-    def create(self, added_by_id=None, member_id=None, swot_id=None):
+    def create(self, added_by_id=None, email=None, swot_id=None):
         member_ids = set([
             m.member_id for m in SwotMember.objects.filter(swot_id=swot_id)
         ])
@@ -77,7 +77,7 @@ class InviteManager(models.Manager):
 
         invite = Invite(
             added_by_id=added_by_id,
-            member_id=member_id,
+            email=email,
             swot_id=swot_id
         )
         invite.save()
@@ -93,12 +93,7 @@ class Invite(models.Model):
                                  null=False,
                                  related_name='+',
                                  related_query_name='+')
-    member = models.ForeignKey(User,
-                               on_delete=models.CASCADE,
-                               blank=False,
-                               null=False,
-                               related_name='+',
-                               related_query_name='+')
+    email = models.EmailField(name='email')
     swot = models.ForeignKey(Swot,
                              on_delete=models.CASCADE,
                              blank=False,
