@@ -9,7 +9,7 @@ from utils.testutils import setup_token
 client = APIClient()
 
 
-class TestViewsPost(TestCase):
+class TestViewsPostResponseShape(TestCase):
     fixtures = ['members.json', 'swots.json', 'users.json']
     auth_data = {
         'user': {
@@ -26,7 +26,7 @@ class TestViewsPost(TestCase):
         response_data = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'username': 'testuser4',
+                'email': 'testuser4@liveswot.com',
             }),
             data=json.dumps({}),
             content_type='application/json'
@@ -39,7 +39,7 @@ class TestViewsPost(TestCase):
         response = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'username': 'testuser4',
+                'email': 'testuser4@liveswot.com',
             }),
             content_type='application/json',
             data=json.dumps({})
@@ -59,7 +59,7 @@ class TestViewsPost(TestCase):
         response_data = client.post(
             reverse('swot_members:post', kwargs={
                 'swot_id': 8,
-                'username': 'testuser4',
+                'email': 'testuser4@liveswot.com',
             }),
             content_type='application/json',
             data=json.dumps({})

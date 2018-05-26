@@ -18,20 +18,20 @@ from authenticationjwt.models import User
 @authenticate
 @deserialize
 @serialize
-def add_members(request, swot_id, username):
+def add_members(request, swot_id, email):
     user_id = int(request.user.id)
     swot_id = int(swot_id)
     swot = None
     user_to_add = None
 
     try:
-        user_to_add = User.objects.get(username=username)
+        user_to_add = User.objects.get(email=email)
     except User.DoesNotExist:
         err_msg = 'Cannot add non-existing user `{}` to swot `{}`'
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            [err_msg.format(username, swot_id)]
+            [err_msg.format(email, swot_id)]
         )
 
     try:
@@ -41,7 +41,7 @@ def add_members(request, swot_id, username):
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            [err_msg.format(username, swot_id)]
+            [err_msg.format(email, swot_id)]
         )
 
     if swot.created_by_id != user_id:
