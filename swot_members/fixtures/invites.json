@@ -3,7 +3,7 @@
     "model": "swot_members.Invite",
     "pk": 1,
     "fields": {
-      "created": "2018-05-28",
+      "created": "2018-05-28T22:30:16.097Z",
       "added_by_id": 5,
       "email": "imran.ariffin3@liveswot.com",
       "swot_id": 8

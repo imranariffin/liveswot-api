@@ -3,7 +3,7 @@
     "model": "swot_item.SwotItem",
     "pk": 1,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "strength",
       "text": "Strength item #1",
       "created_by_id": 5,
@@ -15,7 +15,7 @@
     "model": "swot_item.SwotItem",
     "pk": 2,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "weakness",
       "text": "Weakness item #1",
       "created_by_id": 5,
@@ -27,7 +27,7 @@
     "model": "swot_item.SwotItem",
     "pk": 3,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "strength",
       "text": "Strength item #2 voted once",
       "created_by_id": 2,
@@ -39,7 +39,7 @@
     "model": "swot_item.SwotItem",
     "pk": 4,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "strength",
       "text": "Kekuatan",
       "created_by_id": 5,
@@ -51,7 +51,7 @@
     "model": "swot_item.SwotItem",
     "pk": 5,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "weakness",
       "text": "Kelemahan BN",
       "created_by_id": 5,
@@ -63,7 +63,7 @@
     "model": "swot_item.SwotItem",
     "pk": 6,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "opportunity",
       "text": "Peluang HARAPAN",
       "created_by_id": 5,
@@ -75,7 +75,7 @@
     "model": "swot_item.SwotItem",
     "pk": 8,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "opportunity",
       "text": "Peluang terbaik",
       "created_by_id": 3,
@@ -87,7 +87,7 @@
     "model": "swot_item.SwotItem",
     "pk": 9,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "opportunity",
       "text": "Item with no vote",
       "created_by_id": 5,
@@ -99,7 +99,7 @@
     "model": "swot_item.SwotItem",
     "pk": 10,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "strength",
       "text": "Item with one vote only",
       "created_by_id": 5,
@@ -111,7 +111,7 @@
     "model": "swot_item.SwotItem",
     "pk": 11,
     "fields": {
-      "created": "2017-09-04",
+      "created": "2017-09-04T22:30:16.097Z",
       "cardType": "weakness",
       "text": "Then only item in a swot, so lonely sob sob",
       "created_by_id": 5,
