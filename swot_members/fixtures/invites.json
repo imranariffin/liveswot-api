@@ -8,5 +8,25 @@
       "email": "imran.ariffin3@liveswot.com",
       "swot_id": 8
     }
+  },
+  {
+    "model": "swot_members.Invite",
+    "pk": 2,
+    "fields": {
+      "created": "2018-05-28T22:30:16.097Z",
+      "added_by_id": 5,
+      "email": "pending.invites@liveswot.com",
+      "swot_id": 2
+    }
+  },
+  {
+    "model": "swot_members.Invite",
+    "pk": 3,
+    "fields": {
+      "created": "2018-05-28T22:30:16.097Z",
+      "added_by_id": 5,
+      "email": "pending.invites@liveswot.com",
+      "swot_id": 3
+    }
   }
 ]

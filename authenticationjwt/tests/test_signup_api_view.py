@@ -1,10 +1,12 @@
 import json
 
 import jwt
+from kgb import SpyAgency
 from django.conf import settings
 from django.test import Client, TestCase
 from django.urls import reverse
 from rest_framework import status
+from swot_members.models import SwotMember, Invite
 
 client = Client()
 
@@ -175,3 +177,32 @@ class SignupResponseDataTestCase(TestCase):
             self.assertEqual(True, False)
         self.assertIsInstance(payload['userId'], int)
         self.assertIsInstance(payload['exp'], int)
+
+
+class SignupStatusCodeTestCase(TestCase):
+    fixtures = ['invites.json', 'members.json', 'swots.json', 'users.json']
+    spy_agent = SpyAgency()
+
+    def test_successful_signup_users_with_pending_invites_should_create_memberships(self):
+        email = 'pending.invites@liveswot.com'
+        username = 'pending.invites'
+        password = 'somevalidpassword'
+        create_membership = self.spy_agent.spy_on(
+            SwotMember.objects.create,
+            call_original=False,
+        )
+
+        client.post(
+            reverse('authenticationjwt:signup'),
+            content_type='application/json',
+            data=json.dumps({
+                'user': {
+                    'email': email,
+                    'username': username,
+                    'password': password,
+                }
+            })
+        )
+
+        n = len(Invite.objects.filter(email=email))
+        self.assertEqual(len(create_membership.calls), n)

@@ -1,10 +1,10 @@
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 from django.contrib.auth.hashers import check_password
 
 from .models import User
+from swot_members.models import SwotMember, Invite
 from .validators import validate_signup, validate_login
 
 from .serializers import deserialize, serialize_response
@@ -42,6 +42,17 @@ def signup(request):
             status.HTTP_400_BAD_REQUEST,
             ['Error occurred when creating user'],
         )
+
+    # convert all invitations to membership
+    for inv in Invite.objects.filter(email=email):
+        try:
+            SwotMember.objects.create(
+                member_id=user.id,
+                added_by_id=inv.added_by_id,
+                swot_id=inv.swot_id
+            )
+        except:
+            pass
 
     return (
         user,
