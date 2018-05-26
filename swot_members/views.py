@@ -8,7 +8,8 @@ from core.decorators import authenticate
 
 from swot.models import Swot
 
-from .models import SwotMember
+from .utils import send_invite_email
+from .models import SwotMember, Invite
 from .serializers import serialize
 
 from authenticationjwt.models import User
@@ -27,11 +28,16 @@ def add_members(request, swot_id, email):
     try:
         user_to_add = User.objects.get(email=email)
     except User.DoesNotExist:
-        err_msg = 'Cannot add non-existing user `{}` to swot `{}`'
+        Invite.objects.create(
+            email=email,
+            added_by_id=user_id,
+            swot_id=swot_id
+        )
+        send_invite_email(request.user.email, email)
         return (
             None,
-            status.HTTP_404_NOT_FOUND,
-            [err_msg.format(email, swot_id)]
+            status.HTTP_204_NO_CONTENT,
+            None
         )
 
     try:
