@@ -5,7 +5,7 @@ from swot.models import Swot
 from authenticationjwt.models import User
 
 
-class Manager(models.Manager):
+class MemberManager(models.Manager):
     def create(self, added_by_id=None, member_id=None, swot_id=None):
 
         member_ids = set([
@@ -32,8 +32,6 @@ class Manager(models.Manager):
 
 
 class SwotMember(models.Model):
-    objects = Manager()
-
     created = models.DateTimeField(auto_now_add=True)
     added_by = models.ForeignKey(User,
                                  on_delete=models.CASCADE,
@@ -54,6 +52,8 @@ class SwotMember(models.Model):
                              related_name='+',
                              related_query_name='+')
 
+    objects = MemberManager()
+
     def __str__(self):
         return '[SwotMember id={}, added_by={}, member={}, swot={}]'.format(
             self.id,
@@ -64,3 +64,46 @@ class SwotMember(models.Model):
 
     def __repr__(self):
         return self.__str__()
+
+
+class InviteManager(models.Manager):
+    def create(self, added_by_id=None, member_id=None, swot_id=None):
+        member_ids = set([
+            m.member_id for m in SwotMember.objects.filter(swot_id=swot_id)
+        ])
+
+        if len(member_ids) > 0 and added_by_id not in member_ids:
+            raise IntegrityError('Only swot member can add member')
+
+        invite = Invite(
+            added_by_id=added_by_id,
+            member_id=member_id,
+            swot_id=swot_id
+        )
+        invite.save()
+
+        return invite
+
+
+class Invite(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    added_by = models.ForeignKey(User,
+                                 on_delete=models.CASCADE,
+                                 blank=False,
+                                 null=False,
+                                 related_name='+',
+                                 related_query_name='+')
+    member = models.ForeignKey(User,
+                               on_delete=models.CASCADE,
+                               blank=False,
+                               null=False,
+                               related_name='+',
+                               related_query_name='+')
+    swot = models.ForeignKey(Swot,
+                             on_delete=models.CASCADE,
+                             blank=False,
+                             null=False,
+                             related_name='+',
+                             related_query_name='+')
+
+    objects = InviteManager()

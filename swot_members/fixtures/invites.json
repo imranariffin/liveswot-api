@@ -1,0 +1,12 @@
+[
+  {
+    "model": "swot_members.Invite",
+    "pk": 1,
+    "fields": {
+      "created": "2018-05-28",
+      "added_by_id": 5,
+      "member_id": 20,
+      "swot_id": 8
+    }
+  }
+]
