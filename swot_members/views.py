@@ -8,7 +8,8 @@ from core.decorators import authenticate
 
 from swot.models import Swot
 
-from .models import SwotMember
+from .utils import send_invite_email
+from .models import SwotMember, Invite
 from .serializers import serialize
 
 from authenticationjwt.models import User
@@ -18,30 +19,46 @@ from authenticationjwt.models import User
 @authenticate
 @deserialize
 @serialize
-def add_members(request, swot_id, username):
+def add_members(request, swot_id, email):
     user_id = int(request.user.id)
     swot_id = int(swot_id)
     swot = None
     user_to_add = None
 
     try:
-        user_to_add = User.objects.get(username=username)
+        user_to_add = User.objects.get(email=email)
     except User.DoesNotExist:
-        err_msg = 'Cannot add non-existing user `{}` to swot `{}`'
-        return (
-            None,
-            status.HTTP_404_NOT_FOUND,
-            [err_msg.format(username, swot_id)]
-        )
+        pass
 
     try:
         swot = Swot.objects.get(id=swot_id)
     except Swot.DoesNotExist:
+        pass
+
+    if user_to_add is None and swot is None:
+        return (
+            None,
+            status.HTTP_404_NOT_FOUND,
+            ['User {} and swot {} do not exist'.format(user_id, swot_id)]
+        )
+    elif user_to_add is None:
+        Invite.objects.create(
+            email=email,
+            added_by_id=user_id,
+            swot_id=swot_id
+        )
+        send_invite_email(request.user.email, email)
+        return (
+            None,
+            status.HTTP_200_OK,
+            None
+        )
+    elif swot is None:
         err_msg = 'Cannot add user `{}` to non-existing swot `{}`'
         return (
             None,
             status.HTTP_404_NOT_FOUND,
-            [err_msg.format(username, swot_id)]
+            [err_msg.format(email, swot_id)]
         )
 
     if swot.created_by_id != user_id:

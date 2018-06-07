@@ -1,7 +1,7 @@
 #!/bin/sh
 
+cat scripts/droptables.py | python manage.py shell
 cd $HOME/liveswot-api
-rm db.sqlite3
 python manage.py makemigrations
 python manage.py migrate
 sh scripts/load-test-data.sh
