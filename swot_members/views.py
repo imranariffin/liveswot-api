@@ -36,7 +36,7 @@ def add_members(request, swot_id, email):
         send_invite_email(request.user.email, email)
         return (
             None,
-            status.HTTP_204_NO_CONTENT,
+            status.HTTP_200_OK,
             None
         )
 
