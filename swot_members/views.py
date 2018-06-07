@@ -28,6 +28,20 @@ def add_members(request, swot_id, email):
     try:
         user_to_add = User.objects.get(email=email)
     except User.DoesNotExist:
+        pass
+
+    try:
+        swot = Swot.objects.get(id=swot_id)
+    except Swot.DoesNotExist:
+        pass
+
+    if user_to_add is None and swot is None:
+        return (
+            None,
+            status.HTTP_404_NOT_FOUND,
+            ['User {} and swot {} do not exist'.format(user_id, swot_id)]
+        )
+    elif user_to_add is None:
         Invite.objects.create(
             email=email,
             added_by_id=user_id,
@@ -39,10 +53,7 @@ def add_members(request, swot_id, email):
             status.HTTP_200_OK,
             None
         )
-
-    try:
-        swot = Swot.objects.get(id=swot_id)
-    except Swot.DoesNotExist:
+    elif swot is None:
         err_msg = 'Cannot add user `{}` to non-existing swot `{}`'
         return (
             None,
