@@ -59,7 +59,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(all([type(item['swotId']) == int for item in items]))
         self.assertTrue(all([type(item['text']) == unicode for item in items]))
         self.assertTrue(all([type(item['cardType']) == unicode for item in items]))
-        self.assertTrue(all([type(item['score']) == int for item in items]))
+        self.assertTrue(all([type(item['score']) == float for item in items]))
 
     def test_success_post_swot_items_returns_correct_shape(self):
         response = client.post(
@@ -100,7 +100,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(type(swot_item['creatorId']) == int)
         self.assertTrue(type(swot_item['text']) == unicode)
         self.assertTrue(type(swot_item['cardType']) == unicode)
-        self.assertTrue(type(swot_item['score']) == int)
+        self.assertTrue(type(swot_item['score']) == float)
 
     def test_success_delete_swot_item_returns_correct_shape(self):
         response = client.delete(
@@ -157,7 +157,7 @@ class ShapeSwotItemTestCase(TestCase):
         self.assertTrue(type(swot_item['creatorId']) == int)
         self.assertTrue(type(swot_item['text']) == unicode)
         self.assertTrue(type(swot_item['cardType']) == unicode)
-        self.assertTrue(type(swot_item['score']) == int)
+        self.assertTrue(type(swot_item['score']) == float)
 
 
 class GetSwotItemTestCase(TestCase):
