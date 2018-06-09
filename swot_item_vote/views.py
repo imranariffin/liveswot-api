@@ -14,6 +14,8 @@ from swot.models import Swot
 from core.decorators import authenticate
 from core.serializers import deserialize
 
+from utils.sorting import confidence
+
 
 @api_view(['GET'])
 @authenticate
@@ -99,6 +101,14 @@ def vote(request, swot_item_id):
             status.HTTP_400_BAD_REQUEST,
             ['Error saving vote']
         )
+
+    votes = Vote.objects.filter(swot_item_id=swot_item_id)
+    ups = len([v for v in votes if v.voteType == 'up'])
+    downs = len([v for v in votes if v.voteType == 'down'])
+
+    SwotItem.objects\
+        .filter(pk=swot_item_id)\
+        .update(score=confidence(ups, downs))
 
     return (
         vote,

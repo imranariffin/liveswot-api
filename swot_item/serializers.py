@@ -1,10 +1,4 @@
-from rest_framework import serializers
 from rest_framework.response import Response
-from rest_framework import status
-
-from swot_item.models import SwotItem, CARD_TYPES
-
-import json
 
 
 def serialize(func):

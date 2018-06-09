@@ -8,7 +8,7 @@
       "text": "Strength item #1",
       "created_by_id": 5,
       "swot_id": 1,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -20,7 +20,7 @@
       "text": "Weakness item #1",
       "created_by_id": 5,
       "swot_id": 1,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -32,7 +32,7 @@
       "text": "Strength item #2 voted once",
       "created_by_id": 2,
       "swot_id": 1,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -44,7 +44,7 @@
       "text": "Kekuatan",
       "created_by_id": 5,
       "swot_id": 2,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -56,7 +56,7 @@
       "text": "Kelemahan BN",
       "created_by_id": 5,
       "swot_id": 3,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -68,7 +68,7 @@
       "text": "Peluang HARAPAN",
       "created_by_id": 5,
       "swot_id": 3,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -80,7 +80,7 @@
       "text": "Peluang terbaik",
       "created_by_id": 3,
       "swot_id": 1,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -92,7 +92,7 @@
       "text": "Item with no vote",
       "created_by_id": 5,
       "swot_id": 1,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -104,7 +104,7 @@
       "text": "Item with one vote only",
       "created_by_id": 5,
       "swot_id": 6,
-      "score": 0
+      "score": 0.0
     }
   },
   {
@@ -116,7 +116,7 @@
       "text": "Then only item in a swot, so lonely sob sob",
       "created_by_id": 5,
       "swot_id": 7,
-      "score": 0
+      "score": 0.0
     }
   }
 ]

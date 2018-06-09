@@ -9,7 +9,9 @@ from swot_item.models import SwotItem
 
 from swot_item_vote.models import Vote
 
-from utils import testutils
+from utils import testutils, sorting
+
+from kgb import SpyAgency
 
 client = APIClient()
 
@@ -202,6 +204,37 @@ class PostVoteTestCase(TestCase):
 
         self.assertEqual(len(actual), len(original) + 1)
         Vote.objects.get(swot_id=7).delete()
+
+    def test_post_vote_should_get_score_from_wilson_confidence(self):
+        swot_item_id = 11
+        confidence_spy = SpyAgency().spy_on(sorting.confidence, call_original=True)
+
+        client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': swot_item_id}),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        )
+
+        self.assertTrue(confidence_spy.called)
+
+    def test_post_vote_should_update_score_using_wilson_confidence(self):
+        swot_item_id = 11
+
+        self.assertEqual(
+            SwotItem.objects.get(pk=swot_item_id).score,
+            0
+        )
+
+        client.post(
+            reverse('swot_item_vote:post', kwargs={'swot_item_id': swot_item_id}),
+            data=json.dumps(self.vote_up),
+            content_type='application/json',
+        )
+
+        self.assertNotEqual(
+            SwotItem.objects.get(pk=swot_item_id).score,
+            0
+        )
 
 
 class ErrorVotesTestCase(TestCase):
