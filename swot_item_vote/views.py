@@ -7,14 +7,12 @@ from rest_framework import status
 from swot_item_vote.models import Vote
 from swot_item.models import SwotItem
 
-from .serializers import serialize
+from .serializers import serialize, get_item_confidence
 
 from swot.models import Swot
 
 from core.decorators import authenticate
 from core.serializers import deserialize
-
-from utils.sorting import confidence
 
 
 @api_view(['GET'])
@@ -37,7 +35,7 @@ def vote_list(request, swot_id):
     return (
         [vote for vote in votes],
         status.HTTP_200_OK,
-        None
+        None,
     )
 
 
@@ -102,13 +100,9 @@ def vote(request, swot_item_id):
             ['Error saving vote']
         )
 
-    votes = Vote.objects.filter(swot_item_id=swot_item_id)
-    ups = len([v for v in votes if v.voteType == 'up'])
-    downs = len([v for v in votes if v.voteType == 'down'])
-
     SwotItem.objects\
         .filter(pk=swot_item_id)\
-        .update(score=confidence(ups, downs))
+        .update(score=get_item_confidence(swot_item_id))
 
     return (
         vote,
