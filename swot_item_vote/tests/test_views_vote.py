@@ -142,6 +142,7 @@ class PostVoteTestCase(TestCase):
         self.assertTrue('creatorUsername' in response_data)
         self.assertTrue('voteType' in response_data)
         self.assertTrue('swotItemId' in response_data)
+        self.assertTrue('swotItemScore' in response_data)
 
         Vote.objects.get(swot_item_id=swot_item_id).delete()
 
@@ -159,6 +160,7 @@ class PostVoteTestCase(TestCase):
         self.assertEqual(type(response_data['creatorUsername']), unicode)
         self.assertEqual(type(response_data['voteType']), unicode)
         self.assertEqual(type(response_data['swotItemId']), int)
+        self.assertEqual(type(response_data['swotItemScore']), float)
 
         Vote.objects.get(swot_item_id=swot_item_id).delete()
 
