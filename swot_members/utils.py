@@ -10,7 +10,7 @@ def send_invite_email(invitor, email):
     data = {
         'FromName': 'LiveSWOT',
         'FromEmail': 'contact@liveswot.com',
-        'Subject': 'Test Email',
+        'Subject': 'SWOT Invite',
         'HTML-Part': ''.join([
             '<html><body>',
             '<p>Hey there!<p>',
