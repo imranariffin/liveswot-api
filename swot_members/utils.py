@@ -14,8 +14,8 @@ def send_invite_email(invitor, email):
         'HTML-Part': ''.join([
             '<html><body>',
             '<p>Hey there!<p>',
-            '<p>Your college {} has invited to contribute to a swot.</p>'.format(invitor),
-            '<p>Signup <a href=\'http://localhost:3000/login/\'>here</a> to join the swot</p>',
+            '<p>Your colleague {} has invited you to contribute to a swot.</p>'.format(invitor),
+            '<p>Signup <a href=\'http://localhost:3000/login/\'>here</a> to join the swot.</p>',
             '<p>Cheers,</p>',
             '<p>liveSWOT team</p>',
             '</body></html>'
