@@ -108,11 +108,11 @@ POSTGRES_PASSWORD = read_from_file('postgres_password')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'liveswot',
+        'NAME': 'euuamcbk',
         'USER': POSTGRES_USER,
         'PASSWORD': POSTGRES_PASSWORD,
-        'HOST': 'localhost',
-        'PORT': '',
+        'HOST': 'elmer.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
