@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-from deploy_scripts import read_from_file
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -18,10 +17,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-SECRET_KEY = read_from_file('django_secret_key')
+SECRET_KEY = os.environ['django_secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = read_from_file('django_debug')
+DEBUG = os.environ['django_debug']
 
 ALLOWED_HOSTS = [
     '138.197.152.239',
@@ -102,9 +101,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-POSTGRES_USER = read_from_file('postgres_user')
+POSTGRES_USER = os.environ['postgres_user']
 
-POSTGRES_PASSWORD = read_from_file('postgres_password')
+POSTGRES_PASSWORD = os.environ['postgres_password']
 
 DATABASES = {
     'default': {
