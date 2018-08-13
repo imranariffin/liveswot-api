@@ -10,6 +10,7 @@ venv
 
 ## Env vars ##
 scripts/set-env-vars.sh
+.env
 
 ## Database files ##
 db.sqlite3
