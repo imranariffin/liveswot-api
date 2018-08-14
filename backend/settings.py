@@ -27,7 +27,8 @@ ALLOWED_HOSTS = [
     'liveswot-api.com',
     'www.liveswot-api.com',
     'localhost',
-    'liveswot-ui.herokuapp.com'
+    'liveswot-ui.herokuapp.com',
+    'liveswot-api.herokuapp.com',
 ]
 
 # Application definition
