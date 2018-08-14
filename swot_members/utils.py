@@ -1,8 +1,8 @@
 import mailjet_rest
-from backend.deploy_scripts import read_from_file
+import os
 
-username = read_from_file('mailjet_username')
-password = read_from_file('mailjet_password')
+username = os.environ['mailjet_username']
+password = os.environ['mailjet_password']
 client = mailjet_rest.Client(auth=(username, password), version='v3')
 
 
