@@ -64,6 +64,7 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:3000',
     'www.liveswot.com',
     'liveswot.com',
+    'liveswot-ui.herokuapp.com'
 )
 
 MIDDLEWARE = [
